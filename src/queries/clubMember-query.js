@@ -1,0 +1,8 @@
+exports.getClubMember = 'select * from club_member where join_no = ?'
+exports.getClubMembers = 'select * from club_member'
+exports.getClubMemberWithMemNo = 'select * from club_member where mem_no = ?'
+exports.getClubMemberWithClubNo = 'select * from club_member where club_no = ?'
+exports.insertClubMember = 'insert into club_member(mem_no, club_no, clubjoin_date, joinper_date, clubout_date) values(?,?,?,?,?)'
+exports.updateClubMemberWithJoinPer = 'update club_member set joinper_date = ? where mem_no = ? and club_no = ?'
+exports.updateClubMemberWithClubOut = 'update club_member set clubout_date = ? where mem_no = ? and club_no = ?'
+exports.deleteClubMember = 'delete from club_member where mem_no = ? and club_no = ?'

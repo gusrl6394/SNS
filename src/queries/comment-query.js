@@ -1,0 +1,5 @@
+exports.getComment = 'select * from comment where writing_no = ? and seq_no = ?'
+exports.getCommentsForPost = 'select * from comment where writing_no = ?'
+exports.getCommentsForPostWithLimit = 'select * from comment where writing_no = ? limit ?, ?'
+exports.insertComment = 'insert into comment(writing_no, mem_no, comment, comment_date) values(?,?,?,?)'
+exports.deleteComment = 'delete from comment where writing_no = ? and mem_no = ?'

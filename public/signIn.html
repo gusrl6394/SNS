@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+   <meta charset="UTF-8"> 
+    <title>Sig</title>
+   </head>
+   <link rel="stylesheet" href="/bootstrap.min.css" id="bootstrap-css">
+   <link rel='stylesheet' href='/stylesheets/style.css' />
+
+   <script src="/jquery.min.js"></script>
+   <script src="/bootstrap.min.js"></script>
+
+   <body>
+    <form>
+      <div class="ms-2 mt-2">
+        <span class="fs-5">아이디</span> 
+        <input type="text" placeholder="아이디를 입력하세요" id="id"/>
+      </div>
+      <div class="ms-2 mt-2">
+        <span class="fs-5">비밀번호</span> 
+        <input type="password" placeholder="비밀번호를 입력하세요" id="pw"/>
+      </div>
+      <div class="ms-2 mt-2">
+        <span class="fs-5">성명</span> 
+        <input type="text" placeholder="성명" id="name"/>
+      </div>
+      <div class="ms-2 mt-2">
+        <span class="fs-5">생년월일</span> 
+        <input type="text" placeholder="생년월일" id="birthday"/>
+      </div>
+      <div class="ms-2 mt-2">
+        <span class="fs-5">이메일</span> 
+        <input type="email" placeholder="이메일" id="email"/> 
+      </div>
+      <div class="ms-2 mt-2">
+        <span class="fs-5">닉네임</span> 
+        <input type="text" placeholder="닉네임" id="nickname"/>
+      </div>
+    </form>
+
+    <span>
+      <button type="button" id="cancel" class="btn btn-primary">취소</button>
+    </span>
+    <span>
+       <button type="button" id="signIn" class="btn btn-primary">회원가입</button>
+    </span>
+
+    <script>
+        $("#signIn").click(function(){
+            $.ajax({
+                type : 'post',           // 타입 (get, post, put 등등)
+                url : 'http://localhost:3000/api/member/sign',   // 요청할 서버url
+                async : true,            // 비동기화 여부 (default : true)
+                headers : {              // Http header
+                    "Content-Type" : "application/x-www-form-urlencoded",
+                },
+                dataType : 'json',       // 데이터 타입 (html, xml, json, text 등등)
+                data : {  // 보낼 데이터 (Object , String, Array)
+                    "id" : $("#id").val(),
+                    "pw" : $("#pw").val(),
+                    "name" : $("#name").val(),
+                    "nickname" : $("#nickname").val(),
+                    "email" : $("#email").val(),
+                    "birthday" : $("#birthday").val()
+                },
+                success : function(result) { // 결과 성공 콜백함수
+                    console.log(result);
+                    if(result==='회원가입 성공'){
+                        alert('회원가입 성공')
+                        window.location.href = 'http://localhost:3000/login'
+                    } else if(result==='ID중복'){
+                        alert('ID중복')
+                    } else {
+                        alert('회원가입 실패')
+                    }
+                },
+                error : function(request, status, error) { // 결과 에러 콜백함수
+                    console.log(error)
+                }
+            })
+        })
+
+        $("#cancel").click(function(){
+            window.location.href = 'http://localhost:3000/login'
+        })
+    </script>
+   </body>
+</html>

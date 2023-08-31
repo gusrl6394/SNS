@@ -1,0 +1,44 @@
+const MemberService = require('../services/member-service')
+
+exports.getMember = async (req, res, next) => {
+    let { member_no } = req.params
+    try {
+        let rows = await MemberService.getMember(member_no)
+        return res.json(rows)
+    } catch (e) {
+        return res.status(500).json(e)
+    }
+}
+
+exports.getMembers = async (req, res, next) => {
+    console.log('controller getMembers')
+    try {
+        let rows = await MemberService.getMembers()
+        return res.json(rows)
+    } catch (e) {
+        return res.status(500).json(e)
+    }
+}
+
+exports.insertMember = async (req, res, next) => {
+    try {
+        let [rows, message] = await MemberService.insertMember(req)
+        return res.json(message)
+    } catch (e) {
+        return res.status(500).json(e)
+    }
+}
+
+exports.getMemberWithIdAndPW = async (req, res, next) => {
+    try {
+        let [rows, message] = await MemberService.getMemberWithIdAndPW(req)
+        if(message === '로그인 성공'){
+            res.cookie('id',req.body.id);
+            return res.json(message)
+        } else {
+            return res.json(message)
+        }
+    } catch (e) {
+        return res.status(500).json(e)
+    }
+}

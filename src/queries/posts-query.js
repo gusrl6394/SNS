@@ -1,0 +1,6 @@
+exports.getPost = 'select * from posts where writing_no = ?'
+exports.getPosts = 'select * from posts'
+exports.getPostsWithLimit = 'select * from posts limit = ?, ?'
+exports.insertPost = 'insert into posts(mem_no, club_no, post_code, posts_title, posts_content, posts_date) values(?,?,?,?,?,?)'
+exports.updatePost = 'update posts set post_code = ?, posts_title = ?, posts_content = ? where writing_no = ? and  mem_no = ?'
+exports.deletePost = 'delete from posts where writing_no = ? and mem_no = ?'

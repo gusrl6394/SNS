@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charest="UTF-8" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/bootstrap.min.css" id="bootstrap-css">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+    <script src="/jquery.min.js"></script>
+    <script src="/bootstrap.min.js"></script>
+  </head>
+  <body>
+  <div class="ms-3 mt-5">
+     <div class="ms-3 mt-3">
+      <span class="fs-5">아이디</span>
+      <input type="text" placeholder="아이디를 입력하세요" id="id"/>
+     </div>
+     <div class="ms-3 mt-3">
+      <span class="fs-5">비밀번호</span>
+      <input type="password" placeholder="비밀번호를 입력하세요" id="pw"/>
+     </div>
+    </div>
+    <div class="ms-3 mt-2">
+     <div class="ms-3 mt-3">
+      <span> <button type="button" class="btn btn-primary" id="loginBtn">로그인</button> </span>
+     </div>
+     <div class="ms-3 mt-3">
+      <span> <button type="button" class="btn btn-primary" id="signBtn">회원가입</button> </span>
+     </div>
+  </div>
+  <script>
+      localStorage.clear();
+      sessionStorage.clear();
+
+      $("#loginBtn").click(function(){
+           $.ajax({
+               type : 'post',           // 타입 (get, post, put 등등)
+               url : 'http://localhost:3000/api/member/login',   // 요청할 서버url
+               async : true,            // 비동기화 여부 (default : true)
+               headers : {              // Http header
+                   "Content-Type" : "application/x-www-form-urlencoded",
+               },
+               dataType : 'json',       // 데이터 타입 (html, xml, json, text 등등)
+               data : {  // 보낼 데이터 (Object , String, Array)
+                   "id" : $("#id").val(),
+                   "pw" : $("#pw").val()
+               },
+               success : function(result) { // 결과 성공 콜백함수
+                   console.log(result);
+                   if(result==='로그인 성공'){
+                       window.location.href = 'http://localhost:3000/organization'
+                   }
+               },
+               error : function(request, status, error) { // 결과 에러 콜백함수
+                   console.log(error)
+               }
+           })
+       })
+
+       $("#signBtn").click(function(){
+           window.location.href = 'http://localhost:3000/signIn'
+       })
+  </script>
+  </body>
+</html>
