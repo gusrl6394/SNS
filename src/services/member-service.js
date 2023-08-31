@@ -3,7 +3,7 @@ const MemberQuery = require('../queries/member-query')
 const dayjs = require("dayjs")
 
 exports.getMember = async (member_no) => {
-    const conn  = await pool().catch(err => console.log(err));
+    let conn  = await pool().catch(err => console.log(err));
     try {
         let [rows, fields] = await conn.execute(MemberQuery.getMember, [member_no])
         return rows
@@ -16,7 +16,7 @@ exports.getMember = async (member_no) => {
 }
 
 exports.getMembers = async () => {
-    const conn  = await pool().catch(err => console.log(err));
+    let conn  = await pool().catch(err => console.log(err));
     try {
         let [rows, fields] = await conn.execute(MemberQuery.getMembers)
         return rows
@@ -48,8 +48,8 @@ exports.insertMember = async (req) => {
     if(nickname === undefined || nickname === null){
         nickname = name;
     }
-    
-    const conn  = await pool().catch(err => console.log(err));
+
+    let conn  = await pool().catch(err => console.log(err));
     try {
         let [idSearch, status1] = await conn.execute(MemberQuery.getMemberWithId, [id])
         if(idSearch.length > 0){
@@ -74,7 +74,7 @@ exports.getMemberWithIdAndPW = async (req) => {
         return [null, '로그인 실패']
     }
 
-    const conn  = await pool().catch(err => console.log(err));
+    let conn  = await pool().catch(err => console.log(err));
     try {
         let [rows, fields] = await conn.execute(MemberQuery.getMemberWithIdAndPW, [id, pw])
         if(rows.length === 1){

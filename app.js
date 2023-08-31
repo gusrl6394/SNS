@@ -6,6 +6,7 @@ const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const memberRouter = require('./src/routes/member-route');
+const clubRouter = require('./src/routes/club-route');
 
 const cors = require('cors')
 let corsOptions = {
@@ -29,16 +30,23 @@ app.use(cors(corsOptions))
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/member', memberRouter);
+app.use('/api/club', clubRouter);
 
 const options = { root: __dirname };
 app.get("/login", function(req, res){
     res.clearCookie('id');
+    res.clearCookie('memNo');
+    res.clearCookie('id');
+    res.clearCookie('name');
+    res.clearCookie('nickName');
     res.sendFile("public/login.html", options);
 });
 app.get("/signIn", function(req, res){
     res.sendFile("public/signIn.html", options);
 });
 app.get("/organization", function(req, res){
+    let cookies = req.cookies;
+    let { id } = cookies;
     res.sendFile("public/organization.html", options);
 });
 app.get("/approve", function(req, res){

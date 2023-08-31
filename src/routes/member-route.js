@@ -7,5 +7,4 @@ router.get('/:member_no', MemberController.getMember)
 router.post('/sign', MemberController.insertMember)
 router.post('/login', MemberController.getMemberWithIdAndPW)
 
-
 module.exports = router

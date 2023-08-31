@@ -11,7 +11,6 @@ exports.getMember = async (req, res, next) => {
 }
 
 exports.getMembers = async (req, res, next) => {
-    console.log('controller getMembers')
     try {
         let rows = await MemberService.getMembers()
         return res.json(rows)
@@ -33,7 +32,15 @@ exports.getMemberWithIdAndPW = async (req, res, next) => {
     try {
         let [rows, message] = await MemberService.getMemberWithIdAndPW(req)
         if(message === '로그인 성공'){
-            res.cookie('id',req.body.id);
+            let {mem_no, id, name, nickname} = rows[0];
+            if(nickname === null){
+                nickname = '';
+            }
+            res.cookie('memNo', mem_no);
+            res.cookie('id', id);
+            res.cookie('name', name);
+            res.cookie('nickName', nickname);
+            // res.cookie('id',req.body.id);
             return res.json(message)
         } else {
             return res.json(message)

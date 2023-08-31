@@ -8,15 +8,35 @@
 
     <script src="/jquery.min.js"></script>
     <script src="/bootstrap.min.js"></script>
+       <script>
+           $(document).ready(function() {
+               fetch("http://localhost:3000/api/club")
+                   .then(res => res.json())
+                   .then(data => {
+                       console.log(data)
+
+                       let rows = data
+                       $('#section').empty()
+                       rows.forEach((a) => {
+                           let clubNo = a['club_no']
+                           let clubName = a['clubname']
+                           let memNo = a['mem_no']
+                           let madeDate = a['made_date']
+                           let hobbyCo = a['hobby_co']
+
+                           let temp_html = `<div onclick="location.href='http://localhost:3000/post?clubNo=${clubNo}';">
+                                                    <span class="fs-5">${clubName}</span>
+                                            </div>`
+                           $('#section').append(temp_html)
+                       })
+                   })
+           })
+       </script>
    </head>
    <body>
     <form>
-     <div>
-        <span class="fs-5">동아리1</span>
-     </div>
-     <div>
-        <span class="fs-5">동아리2</span>
-     </div>
+        <div id="section">
+        </div>
     </form>
     <button type="button" class="btn btn-primary">동아리 개설하기</button>
     <div>
