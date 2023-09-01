@@ -7,7 +7,10 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const memberRouter = require('./src/routes/member-route');
 const clubRouter = require('./src/routes/club-route');
+const clubMemberRouter = require('./src/routes/clubMember-route');
 const postRouter = require('./src/routes/post-route');
+const commentRouter = require('./src/routes/comment-route');
+const likeRouter = require('./src/routes/like-route');
 
 const cors = require('cors')
 let corsOptions = {
@@ -26,13 +29,16 @@ app.use(express.static(path.join(__dirname, "/node_modules/jquery/dist")));
 app.use(express.static(path.join(__dirname, "/node_modules/bootstrap/dist/css")));
 app.use(express.static(path.join(__dirname, "/node_modules/bootstrap/dist/js")));
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/member', memberRouter);
 app.use('/api/club', clubRouter);
+app.use('/api/clubMember', clubMemberRouter);
 app.use('/api/post', postRouter);
+app.use('/api/comment', commentRouter);
+app.use('/api/like', likeRouter);
 
 const options = { root: __dirname };
 app.get("/login", function(req, res){
