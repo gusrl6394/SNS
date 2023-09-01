@@ -31,15 +31,15 @@ exports.getMembers = async () => {
 exports.insertMember = async (req) => {
     const id = req.body.id
     const pw = req.body.pw
-    const name = req.body.name ? req.body.name : null
-    let nickname = req.body.nickname ? req.body.nickname : null
-    const birthday = req.body.birthday ? req.body.birthday : null
-    const e_mail = req.body.e_mail ? req.body.e_mail : null
-    const cell_phone = req.body.cell_phone ? req.body.cell_phone : null
-    const loc_cd = req.body.loc_cd ? req.body.loc_cd : null
+    const name = req.body.name === undefined ? null : req.body.name
+    let nickname = req.body.nickname === undefined ? null : req.body.nickname
+    const birthday = req.body.birthday === undefined ? null : req.body.birthday
+    const e_mail = req.body.e_mail === undefined ? null : req.body.e_mail
+    const cell_phone = req.body.cell_phone === undefined ? null : req.body.cell_phone
+    const loc_cd = req.body.loc_cd === undefined ? null : req.body.loc_cd
     const join_date = dayjs().format("YYYY-MM-DD HH:mm:ss")
     const out_date = null
-    const about = req.body.about ? req.body.about : null
+    const about = req.body.about === undefined ? null : req.body.about
 
     if(id === undefined || id === null || pw === undefined || pw === null || name === undefined || name === null){
         return [null, '회원가입 실패']

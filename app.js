@@ -7,6 +7,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const memberRouter = require('./src/routes/member-route');
 const clubRouter = require('./src/routes/club-route');
+const postRouter = require('./src/routes/post-route');
 
 const cors = require('cors')
 let corsOptions = {
@@ -31,6 +32,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/member', memberRouter);
 app.use('/api/club', clubRouter);
+app.use('/api/post', postRouter);
 
 const options = { root: __dirname };
 app.get("/login", function(req, res){
