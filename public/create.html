@@ -8,21 +8,39 @@
 
     <script src="/jquery.min.js"></script>
     <script src="/bootstrap.min.js"></script>
+      <style>
+        .container {
+            width: 50%;
+            margin-left: 30%;
+        }
+        .btn {
+            margin: 5px;
+        }
+        .containers {
+            margin-top: 50px;
+        }
+        .form-floating {
+            width: 300px;
+        }
+      </style>
   </head>
     <body>
-        <div class="m-2">
-          <span class="fs-5">동아리</span>
+    <div class="container">
+        <h2>동아리</h2>
+        <div class="form-floating">
+            <input type="text" class="form-control" id="id" placeholder="동아리를 입력하세요">
+            <label for="id">동아리를 입력하세요</label>
         </div>
-        <div class="m-2">
-            <input type="text" placeholder="동아리를 입력하세요" id="name"/>
-        </div>
-        <div class="m-2">
-            <button type="button" class="btn btn-primary" id="cancel">
-              취소
+    </div>
+        <div class="container">
+            <div class="containers">
+            <button class="btn btn-lg btn-primary" type="submit">
+                취소
             </button>
-            <button type="button" class="btn btn-primary" id="create">
-              동아리 개설하기
+            <button class="btn btn-lg btn-primary" type="submit">
+                동아리 개설하기
             </button>
+            </div>
         </div>
     </body>
 </html>
