@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+// const bodyParser = require("body-parser")
+// const parser = bodyParser.urlencoded({extended:false});
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -20,10 +22,16 @@ let corsOptions = {
 
 const app = express();
 
+app.set('view engine', 'ejs');
+app.set('views', './public');
+
 app.use(logger('dev'));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, "/node_modules/jquery/dist")));
 app.use(express.static(path.join(__dirname, "/node_modules/bootstrap/dist/css")));
@@ -40,47 +48,40 @@ app.use('/api/post', postRouter);
 app.use('/api/comment', commentRouter);
 app.use('/api/like', likeRouter);
 
-const options = { root: __dirname };
-app.get("/login", function(req, res){
-    res.clearCookie('id');
-    res.clearCookie('memNo');
-    res.clearCookie('id');
-    res.clearCookie('name');
-    res.clearCookie('nickName');
-    res.sendFile("public/login.html", options);
-});
-app.get("/signIn", function(req, res){
-    res.sendFile("public/signIn.html", options);
-});
-app.get("/organization", function(req, res){
-    let cookies = req.cookies;
-    let { id } = cookies;
-    res.sendFile("public/organization.html", options);
-});
-app.get("/approve", function(req, res){
-    res.sendFile("public/approve.html", options);
-});
-app.get("/compose", function(req, res){
-    res.sendFile("public/compose.html", options);
-});
-app.get("/create", function(req, res){
-    res.sendFile("public/create.html", options);
-});
-app.get("/information", function(req, res){
-    res.sendFile("public/information.html", options);
-});
-app.get("/member", function(req, res){
-    res.sendFile("public/member.html", options);
-});
-app.get("/mypage", function(req, res){
-    res.sendFile("public/mypage.html", options);
-});
-app.get("/new", function(req, res){
-    res.sendFile("public/new.html", options);
-});
-app.get("/post", function(req, res){
-    res.sendFile("public/post.html", options);
-});
+// const options = { root: __dirname };
+
+
+// app.post("/organization", parser, function(req, res){
+//     // let cookies = req.cookies;
+//     // let { id } = cookies;
+//     console.log(req.body.id)
+//     console.log(req.params.id)
+//     res.render("organization");
+// });
+// app.get("/approve", function(req, res){
+//     res.render("approve");
+// });
+// app.get("/compose", function(req, res){
+//     res.sendFile("public/compose.ejs", options);
+// });
+// app.get("/create", function(req, res){
+//     res.sendFile("public/create.ejs", options);
+// });
+// app.get("/information", function(req, res){
+//     res.sendFile("public/information.ejs", options);
+// });
+// app.get("/member", function(req, res){
+//     res.sendFile("public/member.ejs", options);
+// });
+// app.get("/mypage", function(req, res){
+//     res.sendFile("public/mypage.ejs", options);
+// });
+// app.get("/new", function(req, res){
+//     res.sendFile("public/new.ejs", options);
+// });
+// app.get("/post", function(req, res){
+//     res.sendFile("public/post.ejs", options);
+// });
 
 
 module.exports = app;

@@ -56,8 +56,7 @@ exports.insertMember = async (req) => {
             return [idSearch, 'ID중복']
         }
         let [lastIndex, status2] = await conn.execute(MemberQuery.lastIndex)
-        const mem_no = (lastIndex[0].mem_no*1+1).toString()
-        let [rows, fields] = await conn.execute(MemberQuery.insertMember, [mem_no, id, pw, name, nickname, birthday, e_mail, cell_phone, loc_cd, join_date, out_date, about])
+        let [rows, fields] = await conn.execute(MemberQuery.insertMember, [id, pw, name, nickname, birthday, e_mail, cell_phone, loc_cd, join_date, out_date, about])
         return [rows, '회원가입 성공']
     } catch (e) {
         console.log(e)

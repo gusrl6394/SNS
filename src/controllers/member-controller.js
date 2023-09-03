@@ -36,12 +36,18 @@ exports.getMemberWithIdAndPW = async (req, res, next) => {
             if(nickname === null){
                 nickname = '';
             }
-            res.cookie('memNo', mem_no);
-            res.cookie('id', id);
-            res.cookie('name', name);
-            res.cookie('nickName', nickname);
+            let information = {
+                'memNo' : mem_no,
+                'id' : id,
+                'name' : name,
+                'nickName' : nickname
+            }
+            // res.cookie('memNo', mem_no);
+            // res.cookie('id', id);
+            // res.cookie('name', name);
+            // res.cookie('nickName', nickname);
             // res.cookie('id',req.body.id);
-            return res.json(message)
+            return res.json({msg : message, data : information})
         } else {
             return res.json(message)
         }

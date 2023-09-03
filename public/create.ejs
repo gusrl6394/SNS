@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>enaes</title>
+    <link rel="stylesheet" href="/bootstrap.min.css" id="bootstrap-css">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+    <script src="/jquery.min.js"></script>
+    <script src="/bootstrap.min.js"></script>
+    <script src="/javascripts/common.js"></script>
+
+    <style>
+      .container {
+          width: 50%;
+          margin-left: 30%;
+      }
+      .btn {
+          margin: 5px;
+      }
+      .containers {
+          margin-top: 50px;
+      }
+      .form-floating {
+          width: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <h2>동아리</h2>
+        <div class="form-floating">
+            <input type="text" class="form-control" id="clubName" placeholder="동아리를 입력하세요">
+            <label for="id">동아리를 입력하세요</label>
+        </div>
+    </div>
+    <div class="container">
+        <div class="containers">
+            <button class="btn btn-lg btn-primary" id="cancel" type="submit">
+                취소
+            </button>
+            <button class="btn btn-lg btn-primary" id="create" type="submit">
+                동아리 개설하기
+            </button>
+        </div>
+    </div>
+    <script>
+        $("#create").click(function (){
+            let data = {
+                'id' : $("#id").val(),
+                'memNo' : $("#memNo").val(),
+                'nickName' : $("#nickName").val(),
+                'clubName' : $("#clubName").val()
+            }
+
+            $.ajax({
+                type : 'post',           // 타입 (get, post, put 등등)
+                url : 'http://localhost:3000/api/club/create',   // 요청할 서버url
+                async : true,            // 비동기화 여부 (default : true)
+                headers : {              // Http header
+                    "Content-Type" : "application/x-www-form-urlencoded",
+                },
+                dataType : 'json',       // 데이터 타입 (html, xml, json, text 등등)
+                data : data,
+                success : function(result) { // 결과 성공 콜백함수
+                    console.log(result);
+                    if(result==='동아리 생성 성공'){
+                        alert('동아리 생성 성공')
+                        page_move('http://localhost:3000/organization', data)
+                    }else {
+                        alert('동아리 생성 실패')
+                    }
+                },
+                error : function(request, status, error) { // 결과 에러 콜백함수
+                    console.log(error)
+                }
+            })
+        });
+
+        $("#cancel").click(function (){
+            let data = {
+                'id' : $("#id").val(),
+                'memNo' : $("#memNo").val(),
+                'nickName' : $("#nickName").val()
+            }
+            page_move('http://localhost:3000/organization', data)
+        })
+    </script>
+    <input type="hidden" id="memNo" value="<%=memNo%>">
+    <input type="hidden" id="id" value="<%=id%>">
+    <input type="hidden" id="nickName" value="<%=nickName%>">
+  </body>
+</html>

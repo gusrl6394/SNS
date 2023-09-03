@@ -8,24 +8,25 @@
 
     <script src="/jquery.min.js"></script>
     <script src="/bootstrap.min.js"></script>
-      <style>
-          .form-floating {
-              margin: 20px;
-              width: 300px;
-          }
-          .form-floatings {
-              margin-left: 80px;
-              display: inline-block;
-              width:30%;
-          }
+    <script src="/javascripts/common.js"></script>
 
-          .login {
-              margin: 20px;
-          }
-          .signln {
-              margin: 10px;
-          }
-      </style>
+    <style>
+      .form-floating {
+          margin: 20px;
+          width: 300px;
+      }
+      .form-floatings {
+          margin-left: 80px;
+          display: inline-block;
+          width:30%;
+      }
+      .login {
+          margin: 20px;
+      }
+      .signln {
+          margin: 10px;
+      }
+    </style>
   </head>
   <body class="text-center">
     <div class="form-signIn">
@@ -41,16 +42,16 @@
                 <label for="pwd">비밀번호</label>
              </div>
             </div>
-
-            <div class="login">
-                <button class="btn btn-lg btn-primary" type="submit">로그인</button>
-            </div>
-            <div class="signln">
-                <button class="btn btn-lg btn-primary" type="submit">회원가입</button>
-            </div>
         </form>
+
+        <div class="login">
+            <button class="btn btn-lg btn-primary" id="loginBtn" type="submit">로그인</button>
+        </div>
+        <div class="signln">
+            <button class="btn btn-lg btn-primary" id="signBtn" onclick="location.href='http://localhost:3000/signIn'">회원가입</button>
+        </div>
     </div>
-  <script>
+    <script>
       localStorage.clear();
       sessionStorage.clear();
 
@@ -65,11 +66,14 @@
                dataType : 'json',       // 데이터 타입 (html, xml, json, text 등등)
                data : {  // 보낼 데이터 (Object , String, Array)
                    "id" : $("#id").val(),
-                   "pw" : $("#pw").val()
+                   "pw" : $("#pwd").val()
                },
                success : function(result) { // 결과 성공 콜백함수
-                   if(result==='로그인 성공'){
-                       window.location.href = 'http://localhost:3000/organization'
+                   // console.log(result)
+                   debugger;
+                   if(result.msg === '로그인 성공'){
+                       let data = result.data
+                       page_move('http://localhost:3000/organization', data)
                    }
                },
                error : function(request, status, error) { // 결과 에러 콜백함수
@@ -77,10 +81,6 @@
                }
            })
        })
-
-       $("#signBtn").click(function(){
-           window.location.href = 'http://localhost:3000/signIn'
-       })
-  </script>
+    </script>
   </body>
 </html>

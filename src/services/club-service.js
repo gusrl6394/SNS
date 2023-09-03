@@ -36,6 +36,11 @@ exports.insertClub = async (req) => {
 
     let conn  = await pool().catch(err => console.log(err));
     try {
+        let [result, temp] = await conn.execute(ClubQuery.getClubWithClubname, [clubName])
+        if(result.length > 0){
+            return [null, '동아리 이름 중복']
+        }
+
         // 'insert into club(clubname, mem_no, made_date, hobby_co) values(?,?,?,?)'
         let [rows, fields] = await conn.execute(ClubQuery.insertClub, [clubName, memNo, madeDate, hobbyCo])
         return [rows, '동아리 생성 성공']

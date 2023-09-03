@@ -36,6 +36,19 @@ exports.getCommentsCountForPost = async (req, writingNo) => {
     }
 }
 
+exports.getCommentsCountForPosts = async (writingNo) => {
+    let conn  = await pool().catch(err => console.log(err));
+    try {
+        let [rows, fields] = await conn.execute(Comment.getCommentsCountForPosts, writingNo)
+        return rows
+    } catch (e) {
+        console.log(e)
+        throw  Error(e)
+    } finally {
+        conn.release()
+    }
+}
+
 exports.insertComment = async (req) => {
     const writingNo = req.body.writingNo
     const memNo = req.body.memNo

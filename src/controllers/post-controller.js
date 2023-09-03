@@ -23,6 +23,21 @@ exports.getPosts = async (req, res, next) => {
     }
 }
 
+exports.getPostsWithClubNo = async (req, res, next) => {
+    try {
+        let rows = await PostService.getPostsWithClubNo(req)
+        let writingNoArr = []
+        for(var i=0; i<rows.length; i++){
+            writingNoArr.push(rows[i].writing_no)
+        }
+        let commentCntArr = await CommentService.getCommentsCountForPosts(writingNoArr)
+        let likeCntArr = []
+        return res.json(rows)
+    } catch (e) {
+        return res.status(500).json(e)
+    }
+}
+
 exports.insertPost = async (req, res, next) => {
     try {
         let [rows, message] = await PostService.insertPost(req)
