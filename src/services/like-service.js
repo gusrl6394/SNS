@@ -45,16 +45,51 @@ exports.getlikesWithPostAndMemNo = async (req) => {
     }
 }
 
-exports.getlikesCntWithPost = async (req, writingNo) => {
-    if(writingNo === undefined || writingNo === null){
-        if(req.body.writingNo === undefined || req.body.writingNo === null){
-            return 0
-        }
-        writingNo = req.body.writingNo
-    }
+exports.getlikesCountWithPost = async (req, writingNo) => {
     let conn  = await pool().catch(err => console.log(err));
     try {
-        let [rows, fields] = await conn.execute(Like.getlikesCntWithPost, [writingNo])
+        let [rows, fields] = await conn.execute(Like.getlikesCountWithPost, [writingNo])
+        return rows
+    } catch (e) {
+        console.log(e)
+        throw  Error(e)
+    } finally {
+        conn.release()
+    }
+}
+
+exports.getlikesCountWithPosts = async (req, writingNo) => {
+    const memNo = req.body.memNo
+    const placeholders = writingNo.map(() => '?').join(',');
+    const params = writingNo;
+    const sql = "SELECT writing_no, COUNT(*) AS cnt, MAX(mem_no="+memNo+") AS likeSt "
+        + "FROM likedb "
+        + "WHERE writing_no IN (" + placeholders + ")"
+        + "GROUP BY writing_no";
+    // 'select writing_no, COUNT(*) AS cnt FROM likedb where writing_no IN (?) group by writing_no'
+    let conn  = await pool().catch(err => console.log(err));
+    try {
+        let [rows, fields] = await conn.execute(sql, params)
+        return rows
+    } catch (e) {
+        console.log(e)
+        throw  Error(e)
+    } finally {
+        conn.release()
+    }
+}
+
+exports.getlikesDataWithPosts = async (req, writingNo) => {
+    const memNo = req.body.memNo
+    const placeholders = writingNo.map(() => '?').join(',');
+    const params = writingNo;
+    const sql = "SELECT seq_no, writing_no, mem_no "
+        + "FROM likedb "
+        + "WHERE writing_no IN (" + placeholders + ") "
+        + "AND mem_no = "+memNo;
+    let conn  = await pool().catch(err => console.log(err));
+    try {
+        let [rows, fields] = await conn.execute(sql, params, memNo)
         return rows
     } catch (e) {
         console.log(e)

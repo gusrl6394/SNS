@@ -1,6 +1,7 @@
 exports.getlikesWithPost = 'select * from likedb where writing_no = ?'
 exports.getlikesWithMemNo = 'select * from likedb where mem_no = ?'
 exports.getlikesWithPostAndMemNo = 'select * from likedb where writing_no = ? and mem_no = ?'
-exports.getlikesCntWithPost = 'select count(*) as cnt from likedb where writing_no = ?'
+exports.getlikesCountWithPost = 'select count(*) as cnt from likedb where writing_no = ?'
+// exports.getlikesCountWithPosts = 'select writing_no, COUNT(*) AS cnt FROM likedb where writing_no IN (?) group by writing_no'
 exports.insertLike = 'insert into likedb(writing_no, mem_no, like_no) values(?,?,?)'
 exports.deleteLike = 'delete from likedb where seq_no = ?'

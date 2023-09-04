@@ -1,17 +1,33 @@
 const CommentService = require('../services/comment-service')
+const MemberService = require('../services/member-service')
 
-exports.insertPost = async (req, res, next) => {
+exports.getCommentsForPost = async (req, res) => {
     try {
-        let [rows, message] = await CommentService.insertComment(req)
-        return res.json(message)
+        let rows = await CommentService.getCommentsForPost(req)
+        let memNoSet = new Set()
+        for(var i=0; i<rows.length; i++){
+            memNoSet.add(rows[i].mem_no)
+        }
+        let memNoArr = [...memNoSet]
+        let memberArr = await MemberService.getMembersWithPosts(req, memNoArr)
+        return res.json({'comment' : rows, 'memberArr' : memberArr})
     } catch (e) {
         return res.status(500).json(e)
     }
 }
 
-exports.deleteComment = async (req, res, next) => {
+exports.insertPost = async (req, res) => {
     try {
-        let [rows, message] = await CommentService.deleteComment(req)
+        let rows = await CommentService.insertComment(req)
+        return res.json(rows)
+    } catch (e) {
+        return res.status(500).json(e)
+    }
+}
+
+exports.deleteComment = async (req, res) => {
+    try {
+        let message = await CommentService.deleteComment(req)
         return res.json(message)
     } catch (e) {
         return res.status(500).json(e)

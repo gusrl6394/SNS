@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <title>sno</title>
         <link rel="stylesheet" href="/bootstrap.min.css" id="bootstrap-css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
         <link rel='stylesheet' href='/stylesheets/style.css' />
 
         <script src="/jquery.min.js"></script>
@@ -20,7 +21,7 @@
             }
             .container {
                 width: 50%;
-                margin-bottom: 30px;
+                /*margin-bottom: 30px;*/
             }
             .containers {
                 margin-left: 38%;
@@ -29,48 +30,335 @@
     </head>
     <body>
         <nav>
-            <div class="container">
+            <div class="container mb-3">
                 <span class="contents">게시글 리스트</span>
                 <span class="contents">새소식</span>
                 <span class="contents"> 마이페이지</span>
                 <span class="contents">동아리 리스트</span>
             </div>
         </nav>
+
         <div>
+            <div id="section">
+                <div class="container">
+                    <div class="col-sm-4 col-md-12 py-3">
+                        <div class="card border-primary">
+                            <div class="card-body">
+                                <h3 class="card-title" style="display: inline-block;">Card</h3>
+                                <h5 class="text-end" style="display: inline-block; float: right;">@1</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="#" class="btn btn-outline-secondary">좋아요(990)</a>
+                                <a href="#" class="btn btn-outline-secondary replay">댓글(123)</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="containerSub" style="display: none;">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">@<%=id%></span>
+                            <input type="text" class="form-control" placeholder="댓글을 입력하세요">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button">등록</button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-text">@1</span>
+                            <input type="text" class="form-control" placeholder="Recipient's username" value="123" disabled>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button">삭제</button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-text">@test</span>
+                            <input type="text" class="form-control" placeholder="Recipient's username" value="123" disabled>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button">삭제</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="container">
-             <div class="h-10 p-5 bg-body-teriary border rounded-3">
-                <h2>Add borders</h2>
-                <h2>bdd</h2>
-                <button class="btn btn-lg btn-primary" id="id" type="submit">
-                    삭제
-                </button>
-             </div>
+               <div class="form-floating" style="text-align:center;">
+                  <button class="btn btn-lg btn-primary mt-3" type="submit" id="postCreate">
+<!--                  게시글 쓰기 or 동아리 가입-->
+                      게시글 쓰기
+                  </button>
+               </div>
             </div>
-            <div class="containers">
-                <div class="container">
-                    <div class="form-floating">
-                        <input style="width:200px" type="text" class="form-control" id="id" placeholder="댓글을 입력하세요">
-                        <label for="id">댓글을 입력하세요</label> <button class="btn btn-lg btn-primary" type="submit">댓글</button>
-                    </div>
-                    <div class="form-floating">
-                        <input style="width:200px" type="text" class="form-control" id="id" placeholder="댓글을 입력하세요">
-                        <label for="id">댓글을 입력하세요</label> <button class="btn btn-lg btn-primary" type="submit">댓글</button>
-                    </div>
-                    <div class="form-floating">
-                        <input style="width:200px" type="text" class="form-control" id="id" placeholder="댓글을 입력하세요">
-                        <label for="id">댓글을 입력하세요</label> <button class="btn btn-lg btn-primary" type="submit">댓글</button>
-                    </div>
-                </div>
-            </div>
-            <div class="containers">
-                <div class="container">
-                   <div class="form-floating">
-                      <button class="btn btn-lg btn-primary" type="submit">
-                        게시글 쓰기 or 동아리 가입
-                      </button>
-                   </div>
-                </div>
-            </div>
+
         </div>
+        <script>
+            $(document).ready(function() {
+                let data = {
+                    'id' : $("#id").val(),
+                    'memNo' : $("#memNo").val(),
+                    'nickName' : $("#nickName").val(),
+                    'clubNo' : $("#clubNo").val()
+                }
+
+                fetch("http://localhost:3000/api/post/club", {
+                        method: "POST", // *GET, POST, PUT, DELETE, etc.
+                        headers: {
+                            "Content-Type": "application/json",
+                            // 'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: JSON.stringify(data), // body data type must match "Content-Type" header
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data)
+
+                        $('#section').empty()
+                        let html = ''
+                        let id = $('#id').val()
+                        if(data.length === undefined){
+                            for(var i=0; i<data.post.length; i++){
+                                html += postHtml(id, data.post[i], data.likeCnt, data.commentCnt[i], data.likeDataArr, data.membersArr)
+                            }
+                        }
+                        $('#section').append(html)
+                    })
+            })
+
+            $("#postCreate").click(function (){
+                let data = {
+                    'id' : $("#id").val(),
+                    'memNo' : $("#memNo").val(),
+                    'nickName' : $("#nickName").val(),
+                    'clubNo' : $("#clubNo").val()
+                }
+                page_move('http://localhost:3000/compose', data)
+            })
+
+            $(document).on("click", ".replayDelete", function() {
+                console.log(this);      // 현재 실행 컨텍스트에서 참조되는 객체
+                var el1 = $(this)
+                var el2 = $(this).parent().prev().val()
+                if(el2 === undefined){
+                    console.log('comment 엘리먼트 위치 변경으로 코드 재수정 요망')
+                }
+
+                let data = {
+                    'memNo' : $("#memNo").val(),
+                    'seqNo' : this.dataset.seqno
+                }
+                $.ajax({
+                    method: 'DELETE',
+                    url: 'http://localhost:3000/api/comment/delete',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data: JSON.stringify(data),
+                    success: function (result) {
+                        console.log(result)
+                        // var replaypre = el1.closest('.container').find('.replay').text().substring(3,4)*1
+                        // replaypre -= 1
+                        // el1.closest('.container').find('.replay').text('댓글('+replaypre+')')
+                        $(el1).parent().parent().remove()
+                    },
+                    error: function (request, status, error) { // 결과 에러 콜백함수
+                        console.log(error)
+                    }
+                })
+            });
+
+            $(document).on("click", ".replayCreate", function() {
+                console.log(this);      // 현재 실행 컨텍스트에서 참조되는 객체
+                var el1 = $(this)
+                var el2 = $(this).parent().prev().val()
+                if(el2 === undefined){
+                    console.log('comment 엘리먼트 위치 변경으로 코드 재수정 요망')
+                }
+
+                let data = {
+                    'memNo' : this.dataset.memno,
+                    'writingNo' : this.dataset.writingno,
+                    'comment' : $(this).parent().prev().val()
+                }
+                var comment = $(this).parent().prev().val()
+                $.ajax({
+                    method: 'POST',
+                    url: 'http://localhost:3000/api/comment/create',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data: JSON.stringify(data),
+                    success: function (result) {
+                        console.log(result)
+
+                        var html = '';
+                        html += `<div class="input-group">
+                                    <span class="input-group-text">@<%=id%></span>
+                                    <input type="text" class="form-control" placeholder="Recipient's username" value="${comment}" disabled="">
+                                    <div class="input-group-append"><button class="btn btn-outline-secondary replayDelete" type="button" data-seqno="${result.insertId}" data-memno="<%=memNo%>">삭제</button></div>
+                                </div>`
+                        el1.closest('.containerSub').append(html)
+                    },
+                    error: function (request, status, error) { // 결과 에러 콜백함수
+                        console.log(error)
+                    }
+                })
+            });
+
+            $(document).on("click", ".replay", function() {
+                console.log(this);      // 현재 실행 컨텍스트에서 참조되는 객체
+
+                let container = $(this).closest('.container')
+                let containerSub = $(container).find('.containerSub')
+                var writingno = this.dataset.writingno
+                if($(containerSub).css('display') === 'none'){
+                    let data = {
+                        'writingNo' : this.dataset.writingno
+                    }
+                    $.ajax({
+                        method: 'POST',
+                        async: false,
+                        url: 'http://localhost:3000/api/comment/load',
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        data: JSON.stringify(data),
+                        success: function (result) {
+                            console.log(result)
+                            if(result !== undefined){
+                                var html = replayCreateForm(writingno)
+                                for(var i=0; i<result.comment.length; i++){
+                                    html += replayHtml(result.comment[i], result.memberArr);
+                                }
+                                $(containerSub).append(html)
+                            }
+                        },
+                        error: function (request, status, error) { // 결과 에러 콜백함수
+                            console.log(error)
+                        }
+                    })
+                    $(containerSub).show()
+                } else {
+                    $(containerSub).empty()
+                    $(containerSub).hide()
+                }
+            });
+
+            $(document).on("click", ".like", function() {
+                var el = $(this)
+                var likeCntpre = $(el).text().substring(4,5)*1
+                if($(el).hasClass('btn-danger')) {
+                    let data = {
+                        'seqNo' : this.dataset.index
+                    }
+                    $.ajax({
+                        method: 'DELETE',
+                        url: 'http://localhost:3000/api/like/delete',
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        data: JSON.stringify(data),
+                        success: function (result) {
+                            console.log(result)
+                            likeCntpre -= 1
+                            $(el).removeClass('btn-danger')
+                            $(el).addClass('btn-outline-secondary')
+                            $(el).text('좋아요(' + likeCntpre + ')')
+                        },
+                        error: function (request, status, error) { // 결과 에러 콜백함수
+                            console.log(error)
+                        }
+                    })
+                } else if($(el).hasClass('btn-outline-secondary')){
+                    let data = {
+                        'writingNo' : this.dataset.writingno,
+                        'memNo' : $("#memNo").val()
+                    }
+                    $.ajax({
+                        method: 'POST',
+                        url: 'http://localhost:3000/api/like/create',
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        data: JSON.stringify(data),
+                        success: function (result) {
+                            console.log(result)
+                            likeCntpre += 1
+                            $(el).removeAttr('index');
+                            $(el).attr('data-index',result.insertId);
+                            $(el).removeClass('btn-outline-secondary')
+                            $(el).addClass('btn-danger')
+                            $(el).text('좋아요(' + likeCntpre + ')')
+                        },
+                        error: function (request, status, error) { // 결과 에러 콜백함수
+                            console.log(error)
+                        }
+                    })
+                } else {
+                    console.log('class 조건 확인 요망')
+                }
+            });
+
+            function postHtml(id, post, likeCnt, commentCnt, likeDataArr, membersArr) {
+                var likeCntFilter = likeCnt.filter(it => it.writing_no.includes(post.writing_no))
+                var likeFilter = likeDataArr.filter(it => it.writing_no.includes(post.writing_no))
+                var memberFilter = membersArr.filter(it => it.mem_no.toString().includes(post.mem_no))
+
+                let temp = `<div class="container">
+                                <div class="col-sm-4 col-md-12 py-2">
+                                    <div class="card border-primary">
+                                        <div class="card-body">
+                                            <h3 class="card-title" style="display: inline-block;">${post.posts_title}</h3>
+                                            <h5 class="text-end" style="display: inline-block; float: right;">@${memberFilter[0].id}</h5>
+                                            <p class="card-text">${post.posts_content}</p>`
+
+                if(likeCntFilter.length > 0) {
+                    if (likeFilter.length > 0 && likeFilter[0].mem_no == <%= memNo %>) {
+                        temp += `<a href="#" class="btn btn-danger me-2 like" data-writingNo="${post.writing_no}" data-index="${likeFilter[0].seq_no}">좋아요(${likeCnt[0].cnt})</a>`
+                    } else {
+                        temp += `<a href="#" class="btn btn-outline-secondary me-2 like" data-writingNo="${post.writing_no}">좋아요(${likeCnt[0].cnt})</a>`
+                    }
+                } else {
+                    temp += `<a href="#" class="btn btn-outline-secondary me-2 like" data-writingNo="${post.writing_no}">좋아요(0)</a>`
+                }
+
+                    temp += `<a href="#" class="btn btn-outline-secondary replay" data-writingNo="${post.writing_no}">댓글(${commentCnt.cnt})</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="containerSub" style="display: none;">
+
+                                </div>
+                            </div>`
+                return temp;
+            }
+
+            function replayCreateForm(writingno){
+                var temp = `<div class="input-group mb-3">
+                                        <span class="input-group-text">@<%=id%></span>
+                                        <input type="text" class="form-control" placeholder="댓글을 입력하세요">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary replayCreate" type="button" data-memNo="<%=memNo%>" data-writingNo="${writingno}">등록</button>
+                                        </div>
+                                    </div>`
+                return temp
+            }
+
+            function replayHtml(comment, memberArr){
+                var memberFilter = memberArr.filter(it => it.mem_no.toString().includes(comment.mem_no))
+                var temp = `<div class="input-group">
+                                <span class="input-group-text">@${memberFilter[0].id}</span>
+                                <input type="text" class="form-control" placeholder="Recipient's username" value="${comment.comment}" disabled>
+                                <div class="input-group-append">`
+                if(comment.mem_no == <%=memNo%>) {
+                            temp += `<button class="btn btn-outline-secondary replayDelete" type="button" data-seqNo="${comment.seq_no}" data-memNo="${comment.mem_no}">삭제</button>`
+                } else {
+                            temp += ` <button class="btn btn-outline-secondary replayDelete" type="button" data-seqNo="${comment.seq_no}" data-memNo="${comment.mem_no}" disabled>삭제</button>`
+                }
+                temp +=         `</div>
+                            </div>`
+                return temp;
+            }
+        </script>
+        <input type="hidden" id="memNo" value="<%=memNo%>">
+        <input type="hidden" id="id" value="<%=id%>">
+        <input type="hidden" id="nickName" value="<%=nickName%>">
+        <input type="hidden" id="clubNo" value="<%=clubNo%>">
     </body>
 </html>

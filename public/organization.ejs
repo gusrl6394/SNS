@@ -75,14 +75,13 @@
        })
 
        function goClub(clubNo){
-           debugger;
            let data = {
                'id' : $("#id").val(),
                'memNo' : $("#memNo").val(),
                'nickName' : $("#nickName").val(),
                'clubNo' : clubNo
            }
-           page_move('http://localhost:3000/api/post/club', data)
+           page_move('http://localhost:3000/post', data)
        }
    </script>
    <input type="hidden" id="memNo" value="<%=memNo%>">

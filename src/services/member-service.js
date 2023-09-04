@@ -88,3 +88,21 @@ exports.getMemberWithIdAndPW = async (req) => {
         conn.release()
     }
 }
+
+exports.getMembersWithPosts = async (req, memNo) => {
+    const placeholders = memNo.map(() => '?').join(',');
+    const params = memNo;
+    const sql = "SELECT * "
+        + "FROM member "
+        + "WHERE mem_no IN (" + placeholders + ")";
+    let conn  = await pool().catch(err => console.log(err));
+    try {
+        let [rows, fields] = await conn.execute(sql, params)
+        return rows
+    } catch (e) {
+        console.log(e)
+        throw  Error(e)
+    } finally {
+        conn.release()
+    }
+}

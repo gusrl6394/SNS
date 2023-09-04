@@ -88,11 +88,11 @@
                 dataType : 'json',       // 데이터 타입 (html, xml, json, text 등등)
                 data : {  // 보낼 데이터 (Object , String, Array)
                     "id" : $("#id").val(),
-                    "pw" : $("#pw").val(),
+                    "pw" : $("#pwd").val(),
                     "name" : $("#name").val(),
                     "nickname" : $("#nickname").val(),
                     "email" : $("#email").val(),
-                    "birthday" : $("#birthday").val()
+                    "birthday" : $("#day").val()
                 },
                 success : function(result) { // 결과 성공 콜백함수
                     console.log(result);

@@ -30,7 +30,7 @@ exports.getPosts = async () => {
 }
 
 exports.getPostsWithClubNo = async (req) => {
-    const clubNo = JSON.parse(req.body.some_data).clubNo
+    const clubNo = req.body.clubNo
     let conn  = await pool().catch(err => console.log(err));
     try {
         let [rows, fields] = await conn.execute(PostQuery.getPostsWithClubNo, [clubNo])

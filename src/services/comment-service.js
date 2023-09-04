@@ -37,9 +37,16 @@ exports.getCommentsCountForPost = async (req, writingNo) => {
 }
 
 exports.getCommentsCountForPosts = async (writingNo) => {
+    const placeholders = writingNo.map(() => '?').join(',');
+    const params = writingNo;
+    const sql = "SELECT seq_no, writing_no, mem_no, COUNT(*) AS cnt "
+        + "FROM commentdb "
+        + "WHERE writing_no IN (" + placeholders + ")"
+        + "GROUP BY writing_no";
+    // 'select writing_no, COUNT(*) AS cnt FROM commentdb where writing_no IN (?) group by writing_no'
     let conn  = await pool().catch(err => console.log(err));
     try {
-        let [rows, fields] = await conn.execute(Comment.getCommentsCountForPosts, writingNo)
+        let [rows, fields] = await conn.execute(sql, params)
         return rows
     } catch (e) {
         console.log(e)
@@ -64,7 +71,7 @@ exports.insertComment = async (req) => {
     try {
         // 'insert into comment(writing_no, mem_no, comment, comment_date) values(?,?,?,?)'
         let [rows, fields] = await conn.execute(Comment.insertComment, [writingNo, memNo, comment, commentDate])
-        return [rows, '댓글 생성 성공']
+        return rows
     } catch (e) {
         console.log(e)
         throw Error(e)
@@ -74,17 +81,17 @@ exports.insertComment = async (req) => {
 }
 
 exports.deleteComment = async (req) => {
-    const writingNo = req.body.writingNo
+    const seqNo = req.body.seqNo
     const memNo = req.body.memNo
 
-    if(writingNo === undefined || writingNo === null || memNo === undefined || memNo === null){
-        return [null, '댓글 삭제 실패']
+    if(seqNo === undefined || seqNo === null || memNo === undefined || memNo === null){
+        return '댓글 삭제 실패'
     }
 
     let conn  = await pool().catch(err => console.log(err));
     try {
-        let [rows, fields] = await conn.execute(Comment.deleteComment, [writingNo, memNo])
-        return [rows, '댓글 삭제 성공']
+        let [rows, fields] = await conn.execute(Comment.deleteComment, [seqNo, memNo])
+        return '댓글 삭제 성공'
     } catch (e) {
         console.log(e)
         throw Error(e)

@@ -35,6 +35,15 @@ router.post("/create", function(req, res){
   res.render("create", JSON.parse(req.body.some_data));
 });
 
+router.post("/post", function(req, res){
+  console.log(req.body);
+  res.render("post", JSON.parse(req.body.some_data));
+});
+
+router.post("/compose", function(req, res){
+  console.log(req.body);
+  res.render("compose", JSON.parse(req.body.some_data));
+});
 
 
 module.exports = router;

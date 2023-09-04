@@ -70,10 +70,13 @@
                },
                success : function(result) { // 결과 성공 콜백함수
                    // console.log(result)
-                   debugger;
+
                    if(result.msg === '로그인 성공'){
                        let data = result.data
                        page_move('http://localhost:3000/organization', data)
+                   } else {
+                       console.log('로그인 실패')
+                       alert('로그인 실패')
                    }
                },
                error : function(request, status, error) { // 결과 에러 콜백함수

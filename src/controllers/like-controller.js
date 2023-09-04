@@ -7,7 +7,7 @@ exports.insertLike = async (req, res, next) => {
             return res.json('이미 좋아요 눌렀습니다. 새로고침 필요')
         }
         let [rows, message] = await LikeService.insertLike(req)
-        return res.json(message)
+        return res.json(rows)
     } catch (e) {
         return res.status(500).json(e)
     }
