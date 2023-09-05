@@ -78,6 +78,27 @@
 
     <script>
         $("#signin").click(function(){
+            var id = $("#id").val()
+            var pw = $("#pwd").val()
+            var nickname = $("#nickname").val()
+            var name = $("#name").val()
+            if(id === undefined || id === null || id === ""){
+                alert("아이디를 입력해주세요")
+                return
+            }
+            if(pw === undefined || pw === null || pw === ""){
+                alert("패스워드를 입력해주세요")
+                return
+            }
+            if(nickname === undefined || nickname === null || nickname === ""){
+                alert("닉네임을 입력해주세요")
+                return
+            }
+            if(name === undefined || name === null || name === ""){
+                alert("이름을 입력해주세요")
+                return
+            }
+
             $.ajax({
                 type : 'post',           // 타입 (get, post, put 등등)
                 url : 'http://localhost:3000/api/member/sign',   // 요청할 서버url

@@ -33,7 +33,7 @@ exports.insertMember = async (req) => {
     const pw = req.body.pw
     const name = req.body.name === undefined ? null : req.body.name
     let nickname = req.body.nickname === undefined ? null : req.body.nickname
-    const birthday = req.body.birthday === undefined ? null : req.body.birthday
+    let birthday = req.body.birthday
     const e_mail = req.body.e_mail === undefined ? null : req.body.e_mail
     const cell_phone = req.body.cell_phone === undefined ? null : req.body.cell_phone
     const loc_cd = req.body.loc_cd === undefined ? null : req.body.loc_cd
@@ -49,6 +49,10 @@ exports.insertMember = async (req) => {
         nickname = name;
     }
 
+    if(birthday === undefined || birthday === ""){
+        birthday = null
+    }
+
     let conn  = await pool().catch(err => console.log(err));
     try {
         let [idSearch, status1] = await conn.execute(MemberQuery.getMemberWithId, [id])
@@ -56,6 +60,7 @@ exports.insertMember = async (req) => {
             return [idSearch, 'ID중복']
         }
         let [lastIndex, status2] = await conn.execute(MemberQuery.lastIndex)
+        // 'insert into member(id, pw, name, nickname, birthday, e_mail, cell_phone, loc_cd, join_date, out_date, about) values(?,?,?,?,?,?,?,?,?,?,?)'
         let [rows, fields] = await conn.execute(MemberQuery.insertMember, [id, pw, name, nickname, birthday, e_mail, cell_phone, loc_cd, join_date, out_date, about])
         return [rows, '회원가입 성공']
     } catch (e) {
