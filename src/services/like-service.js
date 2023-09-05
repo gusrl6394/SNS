@@ -138,3 +138,22 @@ exports.deleteLike = async (req) => {
         conn.release()
     }
 }
+
+exports.deleteLikeWithWritingNo = async (req) => {
+    const writingNo = req.body.writingNo
+
+    if(writingNo === undefined || writingNo === null){
+        return '댓글 삭제 실패'
+    }
+
+    let conn  = await pool().catch(err => console.log(err));
+    try {
+        let [rows, fields] = await conn.execute(Like.deleteLikeWithWritingNo, [writingNo])
+        return '댓글 삭제 성공'
+    } catch (e) {
+        console.log(e)
+        throw Error(e)
+    } finally {
+        conn.release()
+    }
+}

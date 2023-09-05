@@ -5,3 +5,4 @@ exports.getlikesCountWithPost = 'select count(*) as cnt from likedb where writin
 // exports.getlikesCountWithPosts = 'select writing_no, COUNT(*) AS cnt FROM likedb where writing_no IN (?) group by writing_no'
 exports.insertLike = 'insert into likedb(writing_no, mem_no, like_no) values(?,?,?)'
 exports.deleteLike = 'delete from likedb where seq_no = ?'
+exports.deleteLikeWithWritingNo = 'delete from likedb where writing_no = ?'

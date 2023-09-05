@@ -27,26 +27,30 @@ exports.getPosts = async (req, res, next) => {
 exports.getPostsWithClubNo = async (req, res, next) => {
     try {
         let rows = await PostService.getPostsWithClubNo(req)
-        let writingNoArr = []
-        let memNoArr = []
-        for(var i=0; i<rows.length; i++){
-            writingNoArr.push(rows[i].writing_no)
-            memNoArr.push(rows[i].mem_no)
-        }
-        let membersArr = await MemberService.getMembersWithPosts(req, memNoArr)
-        let commentCntArr = await CommentService.getCommentsCountForPosts(writingNoArr)
-        let likeCntArr = await LikeService.getlikesCountWithPosts(req, writingNoArr)
-        let likeCntArr_WritingNo = []
-        for(var i=0; i<likeCntArr.length; i++){
-            if(likeCntArr[i].likeSt === 1){
-                likeCntArr_WritingNo.push(likeCntArr[i].writing_no)
+        if(rows.length > 0){
+            let writingNoArr = []
+            let memNoArr = []
+            for(var i=0; i<rows.length; i++){
+                writingNoArr.push(rows[i].writing_no)
+                memNoArr.push(rows[i].mem_no)
             }
+            let membersArr = await MemberService.getMembersWithPosts(req, memNoArr)
+            let commentCntArr = await CommentService.getCommentsCountForPosts(writingNoArr)
+            let likeCntArr = await LikeService.getlikesCountWithPosts(req, writingNoArr)
+            let likeCntArr_WritingNo = []
+            for(var i=0; i<likeCntArr.length; i++){
+                if(likeCntArr[i].likeSt === 1){
+                    likeCntArr_WritingNo.push(likeCntArr[i].writing_no)
+                }
+            }
+            let likeDataArr = []
+            if(likeCntArr_WritingNo.length > 0){
+                likeDataArr = await LikeService.getlikesDataWithPosts(req, likeCntArr_WritingNo)
+            }
+            return res.json({'post' : rows, 'commentCnt' : commentCntArr, 'likeCnt' : likeCntArr, 'likeDataArr' : likeDataArr, 'membersArr' : membersArr})
+        } else {
+            return res.json({'post' : [], 'commentCnt' : [], 'likeCnt' : [], 'likeDataArr' : [], 'membersArr' : []})
         }
-        let likeDataArr = []
-        if(likeCntArr_WritingNo.length > 0){
-            likeDataArr = await LikeService.getlikesDataWithPosts(req, likeCntArr_WritingNo)
-        }
-        return res.json({'post' : rows, 'commentCnt' : commentCntArr, 'likeCnt' : likeCntArr, 'likeDataArr' : likeDataArr, 'membersArr' : membersArr})
     } catch (e) {
         return res.status(500).json(e)
     }
@@ -54,8 +58,21 @@ exports.getPostsWithClubNo = async (req, res, next) => {
 
 exports.insertPost = async (req, res, next) => {
     try {
-        let [rows, message] = await PostService.insertPost(req)
-        return res.json(message)
+        let message = await PostService.insertPost(req)
+        return res.json({"msg":message})
+    } catch (e) {
+        return res.status(500).json(e)
+    }
+}
+
+exports.deletePost = async (req, res, next) => {
+    try {
+        let message = await PostService.deletePost(req)
+        if(message === '글 삭제 성공'){
+            await CommentService.deleteCommentWithWritingNo(req)
+            await LikeService.deleteLikeWithWritingNo(req)
+        }
+        return res.json({"msg":message})
     } catch (e) {
         return res.status(500).json(e)
     }

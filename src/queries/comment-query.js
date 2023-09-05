@@ -5,3 +5,4 @@ exports.getCommentsCountForPost = 'select count(*) as cnt from commentdb where w
 exports.getCommentsForPostWithLimit = 'select * from commentdb where writing_no = ? limit ?, ?'
 exports.insertComment = 'insert into commentdb(writing_no, mem_no, comment, comment_date) values(?,?,?,?)'
 exports.deleteComment = 'delete from commentdb where seq_no = ? and mem_no = ?'
+exports.deleteCommentWithWritingNo = 'delete from commentdb where writing_no = ?'

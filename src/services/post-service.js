@@ -1,7 +1,6 @@
 const pool = require('../database/pool')
 const PostQuery = require('../queries/posts-query')
 const dayjs = require("dayjs")
-const ClubQuery = require("../queries/club-query");
 
 exports.getPost = async (writing_no) => {
     let conn  = await pool().catch(err => console.log(err));
@@ -53,14 +52,38 @@ exports.insertPost = async (req) => {
 
     if(memNo === undefined || memNo === null || clubNo === undefined || clubNo === null ||
         postsTitle === undefined || postsTitle === null || postsContent === undefined){
-        return [null, '글 생성 실패']
+        return '글 생성 실패'
     }
 
     let conn  = await pool().catch(err => console.log(err));
     try {
         // 'insert into posts(mem_no, club_no, post_code, posts_title, posts_content, posts_date) values(?,?,?,?,?,?)'
         let [rows, fields] = await conn.execute(PostQuery.insertPost, [memNo, clubNo, postCode, postsTitle, postsContent, postsDate])
-        return [rows, '글 생성 성공']
+        return '글 생성 성공'
+    } catch (e) {
+        console.log(e)
+        throw Error(e)
+    } finally {
+        conn.release()
+    }
+}
+
+exports.deletePost = async (req) => {
+    const writingNo = req.body.writingNo
+    const memNo = req.body.memNo
+
+    if(writingNo === undefined || writingNo === null || memNo === undefined || memNo === null){
+        return '글 삭제 실패'
+    }
+
+    let conn  = await pool().catch(err => console.log(err));
+    try {
+        let [rows, fields] = await conn.execute(PostQuery.deletePost, [writingNo, memNo])
+        if(rows.affectedRows > 0){
+            return '글 삭제 성공'
+        } else {
+            return '글 삭제 실패'
+        }
     } catch (e) {
         console.log(e)
         throw Error(e)

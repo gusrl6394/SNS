@@ -15,9 +15,9 @@
             width: 50%;
             margin-bottom: 30px;
         }
-        .form-floating > .form-control {
+        .form-floating > .content {
             width: 100%;
-            height: 150px;
+            height: 300px;
         }
         #id {
            height: 50px;
@@ -26,29 +26,80 @@
     </head>
     <body>
         <div class="container">
-        <p style="font-size:30px">제목</p>
-        <div class="form-floating lg">
-            <input type="text" class="form-control" id="id" placeholder="제목를 입력하세요">
+        <p style="font-size:20px">제목</p>
+        <div class="form-floating">
+            <input type="text" class="form-control title" id="title" placeholder="제목를 입력하세요">
             <label for="id">제목을 입력하세요</label>
         </div>
         </div>
         <div class="container">
-            <p style="font-size:30px">내용</p>
+            <p style="font-size:20px">내용</p>
             <div class="form-floating">
-                <input type="text" class="form-control" id="pwd" placeholder="제목를 입력하세요">
-                <label for="id">제목을 입력하세요</label>
+                <textarea type="text" class="form-control content" id="content" placeholder="내용을 입력하세요"></textarea>
+                <label for="id">내용을 입력하세요</label>
             </div>
         </div>
+<!--        <div class="container">-->
+<!--            <button class="btn btn-lg btn-primary" id="imgBtn" type="submit">이미지 등록</button>-->
+<!--        </div>-->
         <div class="container">
-            <button class="btn btn-lg btn-primary" type="submit">이미지 등록</button>
-        </div>
-        <div class="container">
-            <button class="btn btn-lg btn-primary" type="submit">취소</button>
-            <button class="btn btn-lg btn-primary" type="submit">저장</button>
+            <button class="btn btn-lg btn-primary" id="cancel" type="submit">취소</button>
+            <button class="btn btn-lg btn-primary" style="float: right;" id="create" type="submit">저장</button>
         </div>
         <input type="hidden" id="memNo" value="<%=memNo%>">
         <input type="hidden" id="id" value="<%=id%>">
         <input type="hidden" id="nickName" value="<%=nickName%>">
         <input type="hidden" id="clubNo" value="<%=clubNo%>">
+        <script>
+            $("#create").click(function (){
+                let data = {
+                    'id' : $("#id").val(),
+                    'memNo' : $("#memNo").val(),
+                    'nickName' : $("#nickName").val(),
+                    'clubNo' : $("#clubNo").val(),
+                    'postsTitle' : $("#title").val(),
+                    'postsContent' : $("#content").val()
+                }
+
+                if(data.postsTitle === undefined || data.postsTitle === "" || data.postsContent === undefined || data.postsContent === ""){
+                    alert('제목과 내용을 입력해주세요')
+                    return false
+                }
+
+                $.ajax({
+                    type : 'post',
+                    url : 'http://localhost:3000/api/post/create',
+                    headers : {
+                        "Content-Type" : "application/json",
+                    },
+                    data : JSON.stringify(data),
+                    success : function(result) { // 결과 성공 콜백함수
+                        console.log(result)
+                        debugger
+                        if(result.msg === '글 생성 성공'){
+                            page_move('http://localhost:3000/post', data)
+                        } else {
+                            console.log('글 생성 실패')
+                            alert('글 생성 실패')
+                        }
+                    },
+                    error : function(request, status, error) { // 결과 에러 콜백함수
+                        console.log(error)
+                    }
+                })
+            })
+
+
+            $("#cancel").click(function (){
+                let data = {
+                    'id' : $("#id").val(),
+                    'memNo' : $("#memNo").val(),
+                    'nickName' : $("#nickName").val(),
+                    'clubNo' : $("#clubNo").val()
+                }
+                page_move('http://localhost:3000/post', data)
+            })
+        </script>
+
     </body>
 </html>

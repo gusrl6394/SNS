@@ -99,3 +99,22 @@ exports.deleteComment = async (req) => {
         conn.release()
     }
 }
+
+exports.deleteCommentWithWritingNo = async (req) => {
+    const writingNo = req.body.writingNo
+
+    if(writingNo === undefined || writingNo === null ){
+        return '댓글 삭제 실패'
+    }
+
+    let conn  = await pool().catch(err => console.log(err));
+    try {
+        let [rows, fields] = await conn.execute(Comment.deleteCommentWithWritingNo, [writingNo])
+        return '댓글 삭제 성공'
+    } catch (e) {
+        console.log(e)
+        throw Error(e)
+    } finally {
+        conn.release()
+    }
+}
