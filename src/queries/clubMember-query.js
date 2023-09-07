@@ -1,6 +1,7 @@
 exports.getClubMember = 'select * from club_member where join_no = ?'
 exports.getClubMembers = 'select * from club_member'
 exports.getClubMemberWithMemNo = 'select * from club_member where mem_no = ?'
+exports.getClubMemberWithMemNoAndExCl_ClubOut = 'select * from club_member where mem_no = ? and clubout_date is null'
 exports.getClubMemberWithClubNo = 'select * from club_member where club_no = ?'
 exports.getClubMemberPendingApprove = 'select * from club_member where club_no = ? and joinper_date is null and clubout_date is null'
 exports.getClubMemberWithClubJoinMember = 'select * from club_member where club_no = ? and joinper_date is not null and clubout_date is null'

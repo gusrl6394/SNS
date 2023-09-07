@@ -46,10 +46,6 @@
             <button class="btn btn-lg btn-primary" id="cancel" type="submit">취소</button>
             <button class="btn btn-lg btn-primary" style="float: right;" id="create" type="submit">저장</button>
         </div>
-        <input type="hidden" id="memNo" value="<%=memNo%>">
-        <input type="hidden" id="id" value="<%=id%>">
-        <input type="hidden" id="nickName" value="<%=nickName%>">
-        <input type="hidden" id="clubNo" value="<%=clubNo%>">
         <script>
             $("#create").click(function (){
                 let data = {
@@ -95,11 +91,16 @@
                     'id' : $("#id").val(),
                     'memNo' : $("#memNo").val(),
                     'nickName' : $("#nickName").val(),
-                    'clubNo' : $("#clubNo").val()
+                    'clubNo' : $("#clubNo").val(),
+                    'clubMemNo' : $("#clubMemNo").val()
                 }
                 page_move('http://localhost:3000/post', data)
             })
         </script>
-
+        <input type="hidden" id="memNo" value="<%=memNo%>">
+        <input type="hidden" id="id" value="<%=id%>">
+        <input type="hidden" id="nickName" value="<%=nickName%>">
+        <input type="hidden" id="clubNo" value="<%=clubNo%>">
+        <input type="hidden" id="clubMemNo" value="<%=clubMemNo%>">
     </body>
 </html>

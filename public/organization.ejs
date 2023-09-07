@@ -62,7 +62,7 @@
                        let hobbyCo = a['hobby_co']
 
                        let temp_html = `<div class="container">
-                                              <div class="h-10 p-5 bg-body-teriary border rounded-3" onclick="goClub(${clubNo});">
+                                              <div class="h-10 p-5 bg-body-teriary border rounded-3" onclick="goClub(${clubNo}, ${memNo});">
                                                   <h2>${clubName}</h2>
                                               </div>
                                             </div>`
@@ -93,12 +93,13 @@
            page_move('http://localhost:3000/create', data)
        })
 
-       function goClub(clubNo){
+       function goClub(clubNo, memNo){
            let data = {
                'id' : $("#id").val(),
                'memNo' : $("#memNo").val(),
                'nickName' : $("#nickName").val(),
-               'clubNo' : clubNo
+               'clubNo' : clubNo,
+               'clubMemNo' : memNo
            }
            page_move('http://localhost:3000/post', data)
        }

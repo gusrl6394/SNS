@@ -16,6 +16,20 @@ exports.getClubMemberWithClubNo = async (req) => {
     }
 }
 
+exports.getClubMemberWithMemNoAndExCl_ClubOut = async (req) => {
+    const memNo = req.body.memNo
+    let conn  = await pool().catch(err => console.log(err));
+    try {
+        let [rows, fields] = await conn.execute(ClubMember.getClubMemberWithMemNoAndExCl_ClubOut, [memNo])
+        return rows
+    } catch (e) {
+        console.log(e)
+        throw  Error(e)
+    } finally {
+        conn.release()
+    }
+}
+
 exports.getClubMemberPendingApprove = async (req) => {
     const clubNo = req.body.clubNo
     let conn  = await pool().catch(err => console.log(err));

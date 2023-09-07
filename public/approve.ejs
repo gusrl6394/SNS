@@ -5,6 +5,7 @@
         <title>oamoes</title>
         <link rel="stylesheet" href="/bootstrap.min.css" id="bootstrap-css">
         <link rel='stylesheet' href='/stylesheets/style.css' />
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
         <script src="/jquery.min.js"></script>
         <script src="/bootstrap.min.js"></script>
@@ -12,8 +13,9 @@
 
         <style>
             .container {
-                width: 50%;
+                width: 60%;
                 margin-bottom: 30px;
+                text-align: center;
             }
             .btn {
                 margin-left: 10px;
@@ -21,41 +23,100 @@
         </style>
     </head>
     <body>
-    <div class="container">
-    <button class="btn btn-lg btn-primary" type="submit">
-        뒤로가기
-    </button>
-    </div>
+        <div class="container">
+            <div id="section">
+                <div class="w3-card m-2" style="max-width:300px; display: inline-block;">
+                    <img src="images/img_avatar1.png" alt="Avatar" style="width:100%">
+                    <div class="w3-container">
+                        <h4><b>John Doe</b></h4>
+                        <p>Architect and Engineer</p>
+                        <p>Some example text some example text. John Doe is an architect and engineer</p>
+                        <p>
+                            <a href="#" class="w3-button w3-blue">승인</a>
+                            <a href="#" class="w3-button w3-red">거절</a>
+                        </p>
+                    </div>
+                </div>
 
-    <div class="container">
-        <img src="images/human_person_profile_avatar_user_icon_218861.png" width="300px" height="200px">
-        <span>동아리 회원1</span>
-        <button class="btn btn-lg btn-primary" type="submit">
-            승인
-        </button>
-        <button class="btn btn-lg btn-primary" type="submit">
-            거절
-        </button>
-    </div>
-    <div class="container">
-        <img src="images/human_person_profile_avatar_user_icon_218861.png" width="300px" height="200px">
-        <span>동아리 회원2</span>
-        <button class="btn btn-lg btn-primary" type="submit">
-            승인
-        </button>
-        <button class="btn btn-lg btn-primary" type="submit">
-            거절
-        </button>
-    </div>
-    <div class="container">
-        <img src="images/human_person_profile_avatar_user_icon_218861.png" width="300px" height="200px">
-        <span>동아리 회원3</span>
-        <button class="btn btn-lg btn-primary" type="submit">
-            승인
-        </button>
-        <button class="btn btn-lg btn-primary" type="submit">
-            거절
-        </button>
-    </div>
+                <div class="w3-card m-2" style="max-width:300px; display: inline-block;">
+                    <img src="images/img_avatar1.png" alt="Avatar" style="width:100%">
+                    <div class="w3-container">
+                        <h4><b>John Doe</b></h4>
+                        <p>Architect and Engineer</p>
+                        <p>Some example text some example text. John Doe is an architect and engineer</p>
+                        <p>
+                            <a href="#" class="w3-button w3-blue">승인</a>
+                            <a href="#" class="w3-button w3-red">거절</a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="w3-card m-2" style="max-width:300px; display: inline-block;">
+                    <img src="images/img_avatar1.png" alt="Avatar" style="width:100%">
+                    <div class="w3-container">
+                        <h4><b>John Doe</b></h4>
+                        <p>Architect and Engineer</p>
+                        <p>Some example text some example text. John Doe is an architect and engineer</p>
+                        <p>
+                            <a href="#" class="w3-button w3-blue">승인</a>
+                            <a href="#" class="w3-button w3-red">거절</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-lg btn-primary mt-3" id="cancel" type="submit">취소</button>
+        </div>
+
+        <script>
+            $("#cancel").click(function (){
+                let data = {
+                    'id' : $("#id").val(),
+                    'memNo' : $("#memNo").val(),
+                    'nickName' : $("#nickName").val(),
+                    'clubNo' : $("#clubNo").val(),
+                    'clubMemNo' : $("#clubMemNo").val()
+                }
+                page_move('http://localhost:3000/post', data)
+            })
+        </script>
+        <input type="hidden" id="memNo" value="<%=memNo%>">
+        <input type="hidden" id="id" value="<%=id%>">
+        <input type="hidden" id="nickName" value="<%=nickName%>">
+        <input type="hidden" id="clubNo" value="<%=clubNo%>">
+        <input type="hidden" id="clubMemNo" value="<%=clubMemNo%>">
     </body>
 </html>
+
+<!--<div class="container">-->
+<!--    <div class="col-sm-4 col-md-12 py-2">-->
+<!--        <div class="card border-primary">-->
+<!--            <div class="card-body">-->
+<!--                <img src="images/human_person_profile_avatar_user_icon_218861.png" width="100px" height="100px">-->
+<!--                <span>동아리 회원1</span>-->
+<!--                <a href="#" class="btn btn-secondary postDelete" style="float:right;" data-writingno="7">승인</a>-->
+<!--                <a href="#" class="btn btn-secondary postDelete" style="float:right;" data-writingno="7">거절</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+<!--<div class="card" style="width:400px">-->
+<!--    <img class="card-img-top" src="images/img_avatar1.png" alt="Card image">-->
+<!--    <div class="card-body">-->
+<!--        <h4 class="card-title">John Doe</h4>-->
+<!--        <p class="card-text">Some example text.</p>-->
+<!--        <a href="#" class="btn btn-primary">See Profile</a>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<div class="container">-->
+<!--    <img src="images/human_person_profile_avatar_user_icon_218861.png" width="300px" height="200px">-->
+<!--    <span>동아리 회원3</span>-->
+<!--    <button class="btn btn-lg btn-primary" type="submit">-->
+<!--        승인-->
+<!--    </button>-->
+<!--    <button class="btn btn-lg btn-primary" type="submit">-->
+<!--        거절-->
+<!--    </button>-->
+<!--</div>-->

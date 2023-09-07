@@ -45,5 +45,9 @@ router.post("/compose", function(req, res){
   res.render("compose", JSON.parse(req.body.some_data));
 });
 
+router.post("/approve", function(req, res){
+  console.log(req.body);
+  res.render("approve", JSON.parse(req.body.some_data));
+});
 
 module.exports = router;

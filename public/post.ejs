@@ -35,6 +35,9 @@
                 <span class="contents">새소식</span>
                 <span class="contents">동아리 리스트</span>
                 <div style="float: right;">
+                    <% if (clubMemNo == memNo){%>
+                        <button type="button" class="btn btn-secondary btn-sm me-2" id="approveBtn">가입승인</button>
+                    <% }%>
                     <button type="button" class="btn btn-secondary btn-sm me-2" id="refreshBtn">새로고침</button>
                     <button type="button" class="btn btn-dark btn-sm" id="prevBtn">뒤로가기</button>
                 </div>
@@ -124,12 +127,24 @@
                     })
             })
 
+            $("#approveBtn").click(function (){
+                let data = {
+                    'id' : $("#id").val(),
+                    'memNo' : $("#memNo").val(),
+                    'nickName' : $("#nickName").val(),
+                    'clubNo' : $("#clubNo").val(),
+                    'clubMemNo' : $("#clubMemNo").val()
+                }
+                page_move('http://localhost:3000/approve', data)
+            })
+
             $("#refreshBtn").click(function (){
                 let data = {
                     'id' : $("#id").val(),
                     'memNo' : $("#memNo").val(),
                     'nickName' : $("#nickName").val(),
-                    'clubNo' : $("#clubNo").val()
+                    'clubNo' : $("#clubNo").val(),
+                    'clubMemNo' : $("#clubMemNo").val()
                 }
                 page_move('http://localhost:3000/post', data)
             })
@@ -149,7 +164,8 @@
                     'id' : $("#id").val(),
                     'memNo' : $("#memNo").val(),
                     'nickName' : $("#nickName").val(),
-                    'clubNo' : $("#clubNo").val()
+                    'clubNo' : $("#clubNo").val(),
+                    'clubMemNo' : $("#clubMemNo").val()
                 }
                 page_move('http://localhost:3000/compose', data)
             })
@@ -426,5 +442,6 @@
         <input type="hidden" id="id" value="<%=id%>">
         <input type="hidden" id="nickName" value="<%=nickName%>">
         <input type="hidden" id="clubNo" value="<%=clubNo%>">
+        <input type="hidden" id="clubMemNo" value="<%=clubMemNo%>">
     </body>
 </html>
