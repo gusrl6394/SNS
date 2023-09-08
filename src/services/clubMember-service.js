@@ -66,14 +66,14 @@ exports.insertClubMember = async (req) => {
     const clubOutDate = null
 
     if(memNo === undefined || memNo === null || clubNo === undefined || clubNo === null){
-        return [null, '동아리 가입신청 실패']
+        return '동아리 가입 실패'
     }
 
     let conn  = await pool().catch(err => console.log(err));
     try {
         // 'insert into club_member(mem_no, club_no, clubjoin_date, joinper_date, clubout_date) values(?,?,?,?,?)'
         let [rows, fields] = await conn.execute(ClubMember.insertClubMember, [memNo, clubNo, clubJoinDate, joinPerDate, clubOutDate])
-        return [rows, '동아리 가입신청 성공']
+        return '동아리 가입 성공'
     } catch (e) {
         console.log(e)
         throw Error(e)
@@ -85,16 +85,21 @@ exports.insertClubMember = async (req) => {
 exports.updateClubMemberWithJoinPer = async (req) => {
     const memNo = req.body.memNo
     const clubNo = req.body.clubNo
+    const joinNo = req.body.joinNo
     const joinPerDate = dayjs().format("YYYY-MM-DD HH:mm:ss")
 
     if(memNo === undefined || memNo === null || clubNo === undefined || clubNo === null){
-        return [null, '동아리 승인 실패']
+        return '동아리 승인 실패'
     }
 
     let conn  = await pool().catch(err => console.log(err));
     try {
-        let [rows, fields] = await conn.execute(ClubMember.updateClubMemberWithJoinPer, [joinPerDate, memNo, clubNo])
-        return [rows, '동아리 승인 성공']
+        let [rows, fields] = await conn.execute(ClubMember.updateClubMemberWithJoinPer, [joinPerDate, joinNo, clubNo])
+        if(rows.affectedRows > 0){
+            return '동아리 승인 성공'
+        } else {
+            return '동아리 승인 실패'
+        }
     } catch (e) {
         console.log(e)
         throw Error(e)
@@ -106,16 +111,21 @@ exports.updateClubMemberWithJoinPer = async (req) => {
 exports.updateClubMemberWithClubOut = async (req) => {
     const memNo = req.body.memNo
     const clubNo = req.body.clubNo
+    const joinNo = req.body.joinNo
     const clubOutDate = dayjs().format("YYYY-MM-DD HH:mm:ss")
 
     if(memNo === undefined || memNo === null || clubNo === undefined || clubNo === null){
-        return [null, '동아리 탈퇴 실패']
+        return '동아리 탈퇴 실패'
     }
 
     let conn  = await pool().catch(err => console.log(err));
     try {
-        let [rows, fields] = await conn.execute(ClubMember.updateClubMemberWithClubOut, [clubOutDate, memNo, clubNo])
-        return [rows, '동아리 탈퇴 성공']
+        let [rows, fields] = await conn.execute(ClubMember.updateClubMemberWithClubOut, [clubOutDate, joinNo, clubNo])
+        if(rows.affectedRows > 0){
+            return '동아리 탈퇴 성공'
+        } else {
+            return '동아리 탈퇴 실패'
+        }
     } catch (e) {
         console.log(e)
         throw Error(e)

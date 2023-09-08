@@ -53,6 +53,7 @@
                     'memNo' : $("#memNo").val(),
                     'nickName' : $("#nickName").val(),
                     'clubNo' : $("#clubNo").val(),
+                    'clubMemNo' : $("#clubMemNo").val(),
                     'postsTitle' : $("#title").val(),
                     'postsContent' : $("#content").val()
                 }
@@ -71,7 +72,6 @@
                     data : JSON.stringify(data),
                     success : function(result) { // 결과 성공 콜백함수
                         console.log(result)
-                        debugger
                         if(result.msg === '글 생성 성공'){
                             page_move('http://localhost:3000/post', data)
                         } else {

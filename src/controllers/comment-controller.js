@@ -10,7 +10,7 @@ exports.getCommentsForPost = async (req, res) => {
                 memNoSet.add(rows[i].mem_no)
             }
             let memNoArr = [...memNoSet]
-            let memberArr = await MemberService.getMembersWithPosts(req, memNoArr)
+            let memberArr = await MemberService.getMembersWithArr(req, memNoArr)
             return res.json({'comment' : rows, 'memberArr' : memberArr})
         } else {
             return res.json({'comment' : [], 'memberArr' : []})

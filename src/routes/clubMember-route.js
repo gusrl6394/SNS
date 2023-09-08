@@ -3,10 +3,10 @@ const router = express.Router()
 const ClubMemberController = require('../controllers/clubMember-controller')
 
 router.get('/', ClubMemberController.getClubMemberWithClubNo)
-router.get('/pendigApprove', ClubMemberController.getClubMemberPendingApprove)
-router.get('/clubJoinMember', ClubMemberController.getClubMemberWithClubJoinMember)
+router.post('/pendigApprove', ClubMemberController.getClubMemberPendingApprove)
+router.post('/clubJoinMember', ClubMemberController.getClubMemberWithClubJoinMember)
 router.post('/create', ClubMemberController.insertClubMember)
-router.patch('/joinPer', ClubMemberController.updateClubMemberWithJoinPer)
-router.delete('/clubOut', ClubMemberController.updateClubMemberWithClubOut)
+router.patch('/approve', ClubMemberController.updateClubMemberWithJoinPer)
+router.patch('/reject', ClubMemberController.updateClubMemberWithClubOut)
 
 module.exports = router

@@ -16,9 +16,8 @@
           width: 300px;
       }
       .form-floatings {
-          margin-left: 80px;
           display: inline-block;
-          width:30%;
+          width: auto;
       }
       .login {
           margin: 20px;
@@ -31,7 +30,7 @@
   <body class="text-center">
     <div class="form-signIn">
         <form>
-            <h1 class="h3 mb-3 fw-normal">로그인</h1>
+            <h3 class="fw-normal">로그인</h3>
             <div class="form-floatings">
              <div class="form-floating">
                 <input type="text" class="form-control" id="id" placeholder="아이디를 입력하세요">
@@ -43,11 +42,8 @@
              </div>
             </div>
         </form>
-
-        <div class="login">
-            <button class="btn btn-lg btn-primary" id="loginBtn" type="submit">로그인</button>
-        </div>
-        <div class="signln">
+        <div>
+            <button class="btn btn-lg btn-primary me-3" id="loginBtn">로그인</button>
             <button class="btn btn-lg btn-primary" id="signBtn" onclick="location.href='http://localhost:3000/signIn'">회원가입</button>
         </div>
     </div>

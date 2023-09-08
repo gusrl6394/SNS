@@ -94,7 +94,7 @@ exports.getMemberWithIdAndPW = async (req) => {
     }
 }
 
-exports.getMembersWithPosts = async (req, memNo) => {
+exports.getMembersWithArr = async (req, memNo) => {
     const placeholders = memNo.map(() => '?').join(',');
     const params = memNo;
     const sql = "SELECT * "

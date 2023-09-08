@@ -23,52 +23,130 @@
         </style>
     </head>
     <body>
-        <div class="container">
+        <div class="container mt-5">
             <div id="section">
-                <div class="w3-card m-2" style="max-width:300px; display: inline-block;">
-                    <img src="images/img_avatar1.png" alt="Avatar" style="width:100%">
-                    <div class="w3-container">
-                        <h4><b>John Doe</b></h4>
-                        <p>Architect and Engineer</p>
-                        <p>Some example text some example text. John Doe is an architect and engineer</p>
-                        <p>
-                            <a href="#" class="w3-button w3-blue">승인</a>
-                            <a href="#" class="w3-button w3-red">거절</a>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="w3-card m-2" style="max-width:300px; display: inline-block;">
-                    <img src="images/img_avatar1.png" alt="Avatar" style="width:100%">
-                    <div class="w3-container">
-                        <h4><b>John Doe</b></h4>
-                        <p>Architect and Engineer</p>
-                        <p>Some example text some example text. John Doe is an architect and engineer</p>
-                        <p>
-                            <a href="#" class="w3-button w3-blue">승인</a>
-                            <a href="#" class="w3-button w3-red">거절</a>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="w3-card m-2" style="max-width:300px; display: inline-block;">
-                    <img src="images/img_avatar1.png" alt="Avatar" style="width:100%">
-                    <div class="w3-container">
-                        <h4><b>John Doe</b></h4>
-                        <p>Architect and Engineer</p>
-                        <p>Some example text some example text. John Doe is an architect and engineer</p>
-                        <p>
-                            <a href="#" class="w3-button w3-blue">승인</a>
-                            <a href="#" class="w3-button w3-red">거절</a>
-                        </p>
-                    </div>
-                </div>
+<!--                <div class="w3-card m-2" style="max-width:300px; display: inline-block;">-->
+<!--                    <img src="images/img_avatar1.png" alt="Avatar" style="width:100%">-->
+<!--                    <div class="w3-container">-->
+<!--                        <h4><b>John Doe</b></h4>-->
+<!--                        <p>Architect and Engineer</p>-->
+<!--                        <p>Some example text some example text. John Doe is an architect and engineer</p>-->
+<!--                        <p>-->
+<!--                            <a href="#" class="w3-button w3-blue">승인</a>-->
+<!--                            <a href="#" class="w3-button w3-red">거절</a>-->
+<!--                        </p>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
 
             <button class="btn btn-lg btn-primary mt-3" id="cancel" type="submit">취소</button>
         </div>
 
         <script>
+            $(document).ready(function() {
+                let data = {
+                    'id' : $("#id").val(),
+                    'memNo' : $("#memNo").val(),
+                    'nickName' : $("#nickName").val(),
+                    'clubNo' : $("#clubNo").val()
+                }
+
+                fetch("http://localhost:3000/api/clubMember/pendigApprove", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then(res => res.json())
+                    .then(result => {
+                        console.log(result)
+
+                        $('#section').empty()
+                        let html = ''
+                        if(result.rows.length > 0){
+                            for(var i=0; i<result.rows.length; i++){
+                                var row = result.rows[i]
+                                var memberFilter = result.membersArr.filter(it => it.mem_no.toString().includes(row.mem_no))
+                                var avatarNum = Math.floor(Math.random()*6)+1
+                                html += `<div class="w3-card m-2" style="max-width:300px; display: inline-block;">
+                                            <img src="images/img_avatar${avatarNum}.png" alt="Avatar" style="width:100%">
+                                            <div class="w3-container">
+                                                <h4><b>@${memberFilter[0].id}</b></h4>
+                                                <p><b>이름 : </b>${memberFilter[0].name}</p>
+<!--                                                <p>자기소개서</p>-->
+                                                <p>
+                                                    <a href="#" class="w3-button w3-blue approve" data-joinNo="${row.join_no}">승인</a>
+                                                    <a href="#" class="w3-button w3-red reject" data-joinNo="${row.join_no}">거절</a>
+                                                </p>
+                                            </div>
+                                        </div>`
+                            }
+                        } else {
+                            html = '가입승인 대기멤버가 존재하지 않습니다'
+                        }
+                        $('#section').append(html)
+                    })
+            })
+
+            $(document).on("click", ".approve", function() {
+                console.log(this);      // 현재 실행 컨텍스트에서 참조되는 객체
+                let data = {
+                    'memNo' : $("#memNo").val(),
+                    'clubNo' : $("#clubNo").val(),
+                    'joinNo' : this.dataset.joinno
+                }
+                $.ajax({
+                    method: 'PATCH',
+                    url: 'http://localhost:3000/api/clubMember/approve',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data: JSON.stringify(data),
+                    success: function (result) {
+                        console.log(result)
+                        if(result === '동아리 승인 성공'){
+                            alert('동아리 승인 성공')
+                            pageReload()
+                        } else {
+                            alert('동아리 승인 실패')
+                        }
+                    },
+                    error: function (request, status, error) { // 결과 에러 콜백함수
+                        console.log(error)
+                    }
+                })
+            });
+
+            $(document).on("click", ".reject", function() {
+                console.log(this);      // 현재 실행 컨텍스트에서 참조되는 객체
+                let data = {
+                    'memNo' : $("#memNo").val(),
+                    'clubNo' : $("#clubNo").val(),
+                    'joinNo' : this.dataset.joinno
+                }
+                $.ajax({
+                    method: 'PATCH',
+                    url: 'http://localhost:3000/api/clubMember/reject',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data: JSON.stringify(data),
+                    success: function (result) {
+                        console.log(result)
+                        if(result === '동아리 탈퇴 성공'){
+                            alert('동아리 탈퇴 성공')
+                            pageReload()
+                        } else {
+                            alert('동아리 탈퇴 실패')
+                        }
+                    },
+                    error: function (request, status, error) { // 결과 에러 콜백함수
+                        console.log(error)
+                    }
+                })
+            });
+
             $("#cancel").click(function (){
                 let data = {
                     'id' : $("#id").val(),
@@ -79,6 +157,17 @@
                 }
                 page_move('http://localhost:3000/post', data)
             })
+
+            function pageReload(){
+                let data = {
+                    'id' : $("#id").val(),
+                    'memNo' : $("#memNo").val(),
+                    'nickName' : $("#nickName").val(),
+                    'clubNo' : $("#clubNo").val(),
+                    'clubMemNo' : $("#clubMemNo").val()
+                }
+                page_move('http://localhost:3000/approve', data)
+            }
         </script>
         <input type="hidden" id="memNo" value="<%=memNo%>">
         <input type="hidden" id="id" value="<%=id%>">

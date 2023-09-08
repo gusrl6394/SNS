@@ -34,7 +34,7 @@ exports.getPostsWithClubNo = async (req, res, next) => {
                 writingNoArr.push(rows[i].writing_no)
                 memNoArr.push(rows[i].mem_no)
             }
-            let membersArr = await MemberService.getMembersWithPosts(req, memNoArr)
+            let membersArr = await MemberService.getMembersWithArr(req, memNoArr)
             let commentCntArr = await CommentService.getCommentsCountForPosts(writingNoArr)
             let likeCntArr = await LikeService.getlikesCountWithPosts(req, writingNoArr)
             let likeCntArr_WritingNo = []

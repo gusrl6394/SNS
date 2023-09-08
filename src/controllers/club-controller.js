@@ -1,4 +1,5 @@
 const ClubService = require('../services/club-service')
+const ClubMemberService = require('../services/clubMember-service')
 
 exports.getClub = async (req, res, next) => {
     let { club_no } = req.params
@@ -13,7 +14,8 @@ exports.getClub = async (req, res, next) => {
 exports.getClubs = async (req, res, next) => {
     try {
         let rows = await ClubService.getClubs()
-        return res.json(rows)
+        let clubJoinStatus = await ClubMemberService.getClubMemberWithMemNoAndExCl_ClubOut(req)
+        return res.json({'data' : rows, 'clubJoinStatus' : clubJoinStatus})
     } catch (e) {
         return res.status(500).json(e)
     }
