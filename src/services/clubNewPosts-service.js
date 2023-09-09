@@ -25,7 +25,12 @@ exports.postsWithComment  = async (clubNoArr) => {
                     'posts_content' : rows[i].posts_content,
                     'posts_date' : rows[i].posts_date,
                     'commentCnt' : 1,
-                    'likeCnt' : 0
+                    'likeCnt' : 0,
+                    'id' : '',
+                    'name' : '',
+                    'nickname' : '',
+                    'clubMemNo' : 0,
+                    'clubname' : ''
                 }
                 writingData.push(temp)
             } else if(writingData[writingData.length-1].writing_no < rows[i].writing_no) {
@@ -38,7 +43,12 @@ exports.postsWithComment  = async (clubNoArr) => {
                     'posts_content': rows[i].posts_content,
                     'posts_date': rows[i].posts_date,
                     'commentCnt': 1,
-                    'likeCnt' : 0
+                    'likeCnt' : 0,
+                    'id' : '',
+                    'name' : '',
+                    'nickname' : '',
+                    'clubMemNo' : 0,
+                    'clubname' : ''
                 }
                 writingData.push(temp)
             } else {
@@ -53,7 +63,7 @@ exports.postsWithComment  = async (clubNoArr) => {
             + "ON posts.writing_no = likedb.writing_no "
             + "WHERE posts.club_no IN ("+placeholders+") "
             + "ORDER BY posts.writing_no";
-        let [rows2, filed2] = await conn.execute(sql2, params)
+        let [rows2, field2] = await conn.execute(sql2, params)
         if(rows2.length > 0){
             for(var i=0; i<rows2.length; i++){
                 for(var j=0; j<writingData.length; j++){
@@ -63,6 +73,41 @@ exports.postsWithComment  = async (clubNoArr) => {
                 }
             }
         }
+
+        let memNoSet = new Set()
+        for(var i=0; i<writingData.length; i++){
+            memNoSet.add(writingData[i].mem_no)
+        }
+        let memNoArr = [...memNoSet]
+        const placeholders2 = memNoArr.map(() => '?').join(',');
+        const sql3 = `select mem_no, id, name, nickname from member where mem_no in (` + placeholders2 + `)`;
+        let [rows3, field3] = await conn.execute(sql3, memNoArr)
+
+        if(rows3.length > 0){
+            for(var i=0; i<rows3.length; i++){
+                for(var j=0; j<writingData.length; j++){
+                    if(writingData[j].mem_no == rows3[i].mem_no){
+                        writingData[j].id = rows3[i].id
+                        writingData[j].name = rows3[i].name
+                        writingData[j].nickname = rows3[i].nickname
+                    }
+                }
+            }
+        }
+
+        const sql4 = `select club_no, clubname, mem_no as clubMemNo from club where club_no in (` + placeholders + `)`;
+        let [row4, field4] = await conn.execute(sql4, clubNoArr)
+        if(row4.length > 0){
+            for(var i=0; i<row4.length; i++){
+                for(var j=0; j<writingData.length; j++){
+                    if(writingData[j].club_no == row4[i].club_no){
+                        writingData[j].clubname = row4[i].clubname
+                        writingData[j].clubMemNo = row4[i].clubMemNo
+                    }
+                }
+            }
+        }
+
         return [writingData, null]
     } catch (e) {
         console.log(e)

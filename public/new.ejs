@@ -22,16 +22,95 @@
      </style>
     </head>
     <body>
-     <div class="container">
-          <div class="h-10 p-5 bg-body-teriary border rounded-3">
-              <h2>Add borders</h2>
-              <h2>bdd</h2>
-          </div>
-          <div class="h-10 p-5 bg-body-teriary border rounded-3">
-              <h2>Add borders</h2>
-              <h2>bdd</h2>
-          </div>
-     </div>
+        <div class="container mb-5" style="display: block;">
+            <div style="float: right;">
+                <button type="button" class="btn btn-secondary btn-sm me-2" id="refreshBtn">새로고침</button>
+                <button type="button" class="btn btn-dark btn-sm" id="prevBtn">뒤로가기</button>
+            </div>
+        </div>
+        <div id="section">
+<!--              <div class="h-10 p-5 bg-body-teriary border rounded-3">-->
+<!--                  <h2>Add borders</h2>-->
+<!--                  <h2>bdd</h2>-->
+<!--              </div>-->
+        </div>
+        <script>
+            $(document).ready(function() {
+                let data = {
+                    'memNo' : $("#memNo").val()
+                }
 
+                fetch("http://localhost:3000/api/clubNew/postsWithComment", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data), // body data type must match "Content-Type" header
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data)
+
+                        $('#section').empty()
+                        let html = ''
+                        if(data.length > 0){
+                            for(var i=data.length-1; i>=0; i--){
+                                html += postHtml(data[i])
+                            }
+                        }
+                        $('#section').append(html)
+                    })
+            })
+
+            function postHtml(data){
+                var html = `<div class="container">
+                                <div class="col-sm-4 col-md-12 py-2">
+                                    <div class="card border-primary">
+                                        <div class="card-body">
+                                            <h3 class="card-title" style="display: inline-block;">${data.posts_title}</h3>
+                                            <h5 class="text-end" style="display: inline-block; float: right;">${data.clubname} / @${data.id}(${data.name})</h5>
+                                            <p class="card-text">${data.posts_content}</p>
+                                            <a href="javascript:;" class="btn btn-danger me-2 like">좋아요(${data.likeCnt})</a>
+                                            <a href="javascript:;" class="btn btn-outline-secondary replay">댓글(${data.commentCnt})</a>
+                                            <a href="#" class="btn btn-secondary clubGo" style="float:right;" onclick="goClub(${data.club_no}, ${data.clubMemNo})">이동</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                return html;
+            }
+
+            function goClub(clubNo, clubMemNo) {
+                let data = {
+                    'id': $("#id").val(),
+                    'memNo': $("#memNo").val(),
+                    'nickName': $("#nickName").val(),
+                    'clubNo': clubNo,
+                    'clubMemNo': clubMemNo
+                }
+                page_move('http://localhost:3000/post', data)
+            }
+
+            $("#refreshBtn").click(function (){
+                let data = {
+                    'id' : $("#id").val(),
+                    'memNo' : $("#memNo").val(),
+                    'nickName' : $("#nickName").val()
+                }
+                page_move('http://localhost:3000/new', data)
+            })
+
+            $("#prevBtn").click(function (){
+                let data = {
+                    'id' : $("#id").val(),
+                    'memNo' : $("#memNo").val(),
+                    'nickName' : $("#nickName").val()
+                }
+                page_move('http://localhost:3000/organization', data)
+            })
+        </script>
+        <input type="hidden" id="memNo" value="<%=memNo%>">
+        <input type="hidden" id="id" value="<%=id%>">
+        <input type="hidden" id="nickName" value="<%=nickName%>">
     </body>
 </html>
