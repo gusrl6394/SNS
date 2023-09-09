@@ -13,6 +13,7 @@ const clubMemberRouter = require('./src/routes/clubMember-route');
 const postRouter = require('./src/routes/post-route');
 const commentRouter = require('./src/routes/comment-route');
 const likeRouter = require('./src/routes/like-route');
+const clubNewPostRouter = require('./src/routes/clubNewPosts-route');
 
 const cors = require('cors')
 let corsOptions = {
@@ -48,6 +49,7 @@ app.use('/api/clubMember', clubMemberRouter);
 app.use('/api/post', postRouter);
 app.use('/api/comment', commentRouter);
 app.use('/api/like', likeRouter);
+app.use('/api/clubNew', clubNewPostRouter);
 
 // const options = { root: __dirname };
 
