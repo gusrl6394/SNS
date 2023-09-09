@@ -58,22 +58,25 @@ exports.getClubMemberWithClubJoinMember = async (req) => {
     }
 }
 
-exports.insertClubMember = async (req) => {
+exports.insertClubMember = async (req, clubNoArgumnet) => {
     const memNo = req.body.memNo
-    const clubNo = req.body.clubNo
+    var clubNo = req.body.clubNo
+    if(clubNo === undefined){
+        clubNo = clubNoArgumnet
+    }
     const clubJoinDate = dayjs().format("YYYY-MM-DD HH:mm:ss")
     const joinPerDate = null
     const clubOutDate = null
 
     if(memNo === undefined || memNo === null || clubNo === undefined || clubNo === null){
-        return '동아리 가입 실패'
+        return [null, '동아리 가입 실패']
     }
 
     let conn  = await pool().catch(err => console.log(err));
     try {
         // 'insert into club_member(mem_no, club_no, clubjoin_date, joinper_date, clubout_date) values(?,?,?,?,?)'
         let [rows, fields] = await conn.execute(ClubMember.insertClubMember, [memNo, clubNo, clubJoinDate, joinPerDate, clubOutDate])
-        return '동아리 가입 성공'
+        return [rows, '동아리 가입 성공']
     } catch (e) {
         console.log(e)
         throw Error(e)
@@ -82,23 +85,26 @@ exports.insertClubMember = async (req) => {
     }
 }
 
-exports.updateClubMemberWithJoinPer = async (req) => {
-    const memNo = req.body.memNo
-    const clubNo = req.body.clubNo
-    const joinNo = req.body.joinNo
+exports.updateClubMemberWithJoinPer = async (req, joinNoArgumnet) => {
+    // const memNo = req.body.memNo
+    // const clubNo = req.body.clubNo
+    var joinNo = req.body.joinNo
+    if(joinNo === undefined){
+        joinNo = joinNoArgumnet
+    }
     const joinPerDate = dayjs().format("YYYY-MM-DD HH:mm:ss")
 
-    if(memNo === undefined || memNo === null || clubNo === undefined || clubNo === null){
-        return '동아리 승인 실패'
-    }
+    // if(memNo === undefined || memNo === null || clubNo === undefined || clubNo === null){
+    //     return '동아리 승인 실패'
+    // }
 
     let conn  = await pool().catch(err => console.log(err));
     try {
-        let [rows, fields] = await conn.execute(ClubMember.updateClubMemberWithJoinPer, [joinPerDate, joinNo, clubNo])
+        let [rows, fields] = await conn.execute(ClubMember.updateClubMemberWithJoinPer, [joinPerDate, joinNo])
         if(rows.affectedRows > 0){
-            return '동아리 승인 성공'
+            return [rows, '동아리 승인 성공']
         } else {
-            return '동아리 승인 실패'
+            return [rows, '동아리 승인 실패']
         }
     } catch (e) {
         console.log(e)
@@ -109,18 +115,18 @@ exports.updateClubMemberWithJoinPer = async (req) => {
 }
 
 exports.updateClubMemberWithClubOut = async (req) => {
-    const memNo = req.body.memNo
-    const clubNo = req.body.clubNo
+    // const memNo = req.body.memNo
+    // const clubNo = req.body.clubNo
     const joinNo = req.body.joinNo
     const clubOutDate = dayjs().format("YYYY-MM-DD HH:mm:ss")
 
-    if(memNo === undefined || memNo === null || clubNo === undefined || clubNo === null){
-        return '동아리 탈퇴 실패'
-    }
+    // if(memNo === undefined || memNo === null || clubNo === undefined || clubNo === null){
+    //     return '동아리 탈퇴 실패'
+    // }
 
     let conn  = await pool().catch(err => console.log(err));
     try {
-        let [rows, fields] = await conn.execute(ClubMember.updateClubMemberWithClubOut, [clubOutDate, joinNo, clubNo])
+        let [rows, fields] = await conn.execute(ClubMember.updateClubMemberWithClubOut, [clubOutDate, joinNo])
         if(rows.affectedRows > 0){
             return '동아리 탈퇴 성공'
         } else {

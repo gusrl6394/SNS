@@ -42,7 +42,7 @@ exports.getClubMemberWithClubJoinMember = async (req, res, next) => {
 
 exports.insertClubMember = async (req, res, next) => {
     try {
-        let message = await ClubMemberService.insertClubMember(req)
+        let [rows, message] = await ClubMemberService.insertClubMember(req, {})
         return res.json(message)
     } catch (e) {
         return res.status(500).json(e)
@@ -51,7 +51,7 @@ exports.insertClubMember = async (req, res, next) => {
 
 exports.updateClubMemberWithJoinPer = async (req, res, next) => {
     try {
-        let message = await ClubMemberService.updateClubMemberWithJoinPer(req)
+        let [rows, message] = await ClubMemberService.updateClubMemberWithJoinPer(req, {})
         return res.json(message)
     } catch (e) {
         return res.status(500).json(e)
